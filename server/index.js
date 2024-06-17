@@ -26,5 +26,5 @@ app.get('/', (request, response) => {
 });
 
 app.listen(port, function(){
-    console.log("Listening on port " + port);
+    console.log("  ➜ Local: Server Listening on port " + port + " (http://localhost:" + port + ")");
 });
