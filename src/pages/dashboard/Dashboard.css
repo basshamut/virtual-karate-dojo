@@ -1,0 +1,46 @@
+/* Estilos base para los botones */
+.custom-button {
+    font-size: 12px; /* Tamaño de fuente más pequeño */
+    padding: 0.25rem 0.5rem; /* Reducción del relleno */
+}
+
+/* Estilos responsivos */
+@media (max-width: 600px) {
+    .custom-button {
+        width: 100%; /* Ancho completo en pantallas pequeñas */
+    }
+}
+
+@media (min-width: 601px) {
+    .custom-button {
+        width: auto; /* Ajuste automático del ancho en pantallas grandes */
+        padding: 0.5rem 1rem; /* Tamaño de relleno ajustado para pantallas grandes */
+    }
+}
+
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.dashboard-section {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+    .dashboard-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 1024px) {
+    .dashboard-container {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

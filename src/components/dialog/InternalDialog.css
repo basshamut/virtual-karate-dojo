@@ -1,0 +1,30 @@
+.dialog-demo .p-button {
+    margin: 0 .5rem 0 0;
+    min-width: 10rem;
+}
+
+.dialog-demo p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.dialog-demo .confirmation-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialog-demo .p-dialog .p-button {
+    min-width: 6rem;
+}
+
+.dialog-footer {
+    display: flex;
+    justify-content: flex-end; /* Alinea los elementos al final (derecha) del contenedor */
+    align-items: center; /* Centra verticalmente los elementos */
+    padding-top: 1rem; /* Añade espacio superior para separación visual */
+}
+
+.spacer {
+    flex: 1; /* Espaciador flexible para empujar los botones a la derecha */
+}
