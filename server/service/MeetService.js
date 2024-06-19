@@ -2,15 +2,46 @@ const meetRepository = require('../persistance/MeetRepository')
 
 const MeetService = {}
 
-MeetService.save = function (meet){
-    const newMeet = {
-        id: meetRepository.length + 1,
-        meetUrl: meet.meetUrl
-    }
+MeetService.save = async function (meet){
+    console.log("Controller:" + meet)
+    return await meetRepository.create({
+        meetUrl: meet.meetUrl,
+        meetDate: meet.meetDate
+    })
+}
 
-    meetRepository.push(newMeet)
+MeetService.getAll = async function (){
+    return await meetRepository.findAll();
+}
 
-    return newMeet
+MeetService.getOne = async function (id){
+    return await meetRepository.findByPk(id);
+}
+
+MeetService.update = async function (id, meet){
+    await meetRepository.update(meet, {
+        where: {
+            id: id
+        }
+    });
+
+    return await meetRepository.findByPk(id);
+}
+
+MeetService.delete = async function (id){
+    await meetRepository.destroy({
+        where: {
+            id: id
+        }
+    });
+}
+
+MeetService.getByUrl = async function (url){
+    return await meetRepository.findOne({
+        where: {
+            meetUrl: url
+        }
+    });
 }
 
 module.exports = MeetService

@@ -1,3 +1,22 @@
-let meets_db = []
+const {DataTypes} = require('sequelize');
+const sequelize = require('../config/database/database');
 
-module.exports = meets_db
+const MeetRepository = sequelize.define('Meet', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    meetUrl: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    meetDate: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+}, {
+    timestamps: false
+});
+
+module.exports = MeetRepository;
