@@ -43,6 +43,8 @@ app.post('/api/create-checkout-session', async (req, res) => {
             cancel_url: 'http://localhost:5173/dashboard?state=canceled'
         });
 
+        console.log(session)
+
         res.json({ sessionId: session.id });
     } catch (error) {
         res.status(500).json({error: error.message});

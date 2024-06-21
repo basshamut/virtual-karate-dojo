@@ -23,7 +23,6 @@ export default function RegisterForm() {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
                 setUrl('');
                 setDate(today);
             })
@@ -50,7 +49,7 @@ export default function RegisterForm() {
                 <label htmlFor="meetDate" className="text-primary-50 font-semibold">
                     Meet Date
                 </label>
-                <Calendar id="meetDate" value={date} onChange={(e) => setDate(e.value)} dateFormat="dd/mm/yy" minDate={today}/>
+                <Calendar id="meetDate" value={date} onChange={(e) => setDate(e.value)} dateFormat="dd/mm/yy" minDate={today} showTime hourFormat="24"/>
             </div>
             <div className="flex align-items-center gap-2">
                 <Button label="Registrar" onClick={saveMeet} text

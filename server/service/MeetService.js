@@ -3,10 +3,9 @@ const meetRepository = require('../persistance/MeetRepository')
 const MeetService = {}
 
 MeetService.save = async function (meet){
-    console.log("Controller:" + meet)
     return await meetRepository.create({
         meetUrl: meet.meetUrl,
-        meetDate: meet.meetDate
+        meetDate: new Date( Date.parse(meet.meetDate))
     })
 }
 

@@ -11,8 +11,6 @@ router.post('/', (request, response) => {
         meetDate: request.body.meetDate
     }
 
-    console.log("Controller:" + meet)
-
     const newMeet = meetService.save(meet)
 
     response.status(201).send(newMeet)
@@ -34,8 +32,8 @@ router.get('/', async (request, response) => {
     }
 })
 router.get('/all', async (request, response) => {
-        const meets = await meetService.getAll()
-        response.status(200).send(meets)
+    const meets = await meetService.getAll()
+    response.status(200).send(meets)
 })
 
 module.exports = router

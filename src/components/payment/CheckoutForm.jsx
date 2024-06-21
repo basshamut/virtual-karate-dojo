@@ -1,7 +1,9 @@
-import React, { useCallback } from "react";
-import { loadStripe } from '@stripe/stripe-js';
+import {useCallback} from "react";
+import {loadStripe} from '@stripe/stripe-js';
+import {format} from "date-fns";
 
-export default function CheckoutForm() {
+export default function CheckoutForm(props) {
+    const {meet} = props
     const stripePromise = loadStripe("pk_test_51PSHknKnVUk9u0R7xWznb2PU2LeYeOgFXDVB14wP4BvJQBJ3RdH0ZLF801Ka7oLlNd7pFV7VZndQa2soCDluMFf200UugFXgnD");
 
     const fetchSessionId = useCallback(() => {
@@ -48,6 +50,7 @@ export default function CheckoutForm() {
             <div style={{ backgroundImage: 'radial-gradient(circle at left top, var(--primary-400), var(--primary-700))', color: 'white', padding: '20px', textAlign: 'center' }}>
                 <h1>SHOTOKAN KARATE</h1>
                 <h2>Clase de Karate</h2>
+                <h2>Fecha: {format(meet.meetDate, 'dd/MM/yyyy HH:mm')}</h2>
                 <p>Precio: <strong>15 €</strong></p>
                 <button onClick={handleCheckout} style={{ backgroundColor: 'black', color: 'white', padding: '10px 20px', fontSize: '16px' }}>
                     Comprar

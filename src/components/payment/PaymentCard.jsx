@@ -1,13 +1,10 @@
-import React, {useState, useEffect} from "react";
-import {BrowserRouter as Router, Route, Routes, Navigate} from "react-router-dom";
-import CheckoutForm from "./CheckoutForm.jsx";
+import CheckoutForm from "./CheckoutForm.jsx"
 
-
-
-export default function PaymentCard() {
-    return(
+export default function PaymentCard(props) {
+    const {meet} = props
+    return (
         <div>
-            <CheckoutForm/>
+            <CheckoutForm key={meet.id} meet={meet}/>
         </div>
     )
 }

@@ -29,7 +29,7 @@ function InnerApp() {
 
             <Routes>
                 <Route path="/login" element={<Login/>}/>
-                <Route path="/dashboard" element={<Dashboard/>}/>
+                <Route path="/dashboard/*" element={<Dashboard/>}/>
                 <Route path="/" element={<Login/>}/>
             </Routes>
         </>
