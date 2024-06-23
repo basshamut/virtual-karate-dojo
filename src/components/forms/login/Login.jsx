@@ -3,8 +3,8 @@ import {Dialog} from 'primereact/dialog'
 import {InputText} from "primereact/inputtext"
 import {useState} from "react"
 import {useNavigate} from "react-router-dom"
-import {startSession} from "../../../utils/session.jsx";
-import background from "/Shotokan_Fondo.svg";
+import {startSession} from "../../../utils/session.jsx"
+import background from "/Shotokan_Fondo.svg"
 
 
 export default function Login() {
@@ -13,21 +13,46 @@ export default function Login() {
     const [user, setUser] = useState("")
     const [password, setPassword] = useState("")
 
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        return re.test(email)
+    }
+
     function doLogin() {
-        //TODO implementar lógica de login con backend
-        setVisible(false)
-        if (user === 'jesfaj7' && password === "12345") {
-            startSession({name: 'Jesús', lastName: 'Fajardo', email: '', role: 'ADMIN'})
-            navigate("/dashboard")
-        }
-        if (user === 'test' && password === "12345") {
-            startSession({name: 'Jesús', lastName: 'Fajardo', email: '', role: 'USER'})
-            navigate("/dashboard")
+        if (validateEmail(user)) {
+            fetch('http://localhost:5000/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({user, password})
+            })
+                .then(async response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok')
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    startSession(data)
+                    navigate("/dashboard")
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error)
+                })
+        } else {
+            alert("El email no es válido")
         }
     }
 
+    function doRegister() {
+        setVisible(false)
+        navigate("/register")
+    }
+
     return (
-        <div className="card flex justify-content-center" style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', height: '100vh'}}>
+        <div className="card flex justify-content-center"
+             style={{backgroundImage: `url(${background})`, backgroundSize: 'cover', height: '100vh'}}>
             <Dialog
                 visible={visible}
                 modal
@@ -62,7 +87,7 @@ export default function Login() {
                                     className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"></Button>
                         </div>
                         <div className="flex align-items-center gap-2">
-                            <Button label="Registrarse" onClick={() => setVisible(false)} text
+                            <Button label="Registrarse" onClick={() => doRegister()} text
                                     className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"></Button>
                         </div>
                     </div>

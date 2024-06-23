@@ -1,25 +1,36 @@
-import {start, useEnd, useMenuItems} from "../../components/menu/MenuItemData";
+import {useLocation, useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
 import {Menubar} from 'primereact/menubar';
-import './Dashboard.css'
 import PrincipalCardContainer from "../../components/card/PrincipalCardContainer.jsx";
-import background from "/Shotokan_Fondo.svg";
-import {useLocation} from "react-router-dom";
-import {useState} from "react";
 import InternalDialog from "../../components/dialog/InternalDialog.jsx";
+import {start, useEnd, useMenuItems} from "../../components/menu/MenuItemData";
+import {hasSession} from "../../utils/session.jsx";
+import './Dashboard.css'
+import background from "/Shotokan_Fondo.svg";
+import useSavePurchase from "../../hooks/useSavePurchase.js";
 
 export default function Dashboard() {
-    const location = useLocation();
-    const params = new URLSearchParams(location.search);
-    const [state,setState] = useState(params.get('state'));
-
+    const [visible, setVisible] = useState(false)
+    const params = new URLSearchParams(useLocation().search);
+    const [state,setState] = useState("");
+    const [meetId,setMeetId] = useState("");
+    const [userId,setUserId] = useState("");
+    const navigate = useNavigate();
     const menuItems = useMenuItems()
     const end = useEnd()
-
-    const [visible, setVisible] = useState(false)
+    const purchase = useSavePurchase(state === 'succeeded', meetId, userId)
 
     const handleDialogClose = () => {
         setVisible(false)
     }
+    useEffect(() => {
+        if (!hasSession()) {
+            navigate('/login')
+        }
+        setMeetId(params.get('meetId'))
+        setUserId(params.get('userId'))
+        setState(params.get('state'))
+    }, [navigate])
 
     return (
         <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', height: '100vh' }}>

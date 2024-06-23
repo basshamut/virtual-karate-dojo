@@ -1,26 +1,30 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database/database');
 
-const MeetRepository = sequelize.define('Meet', {
+const UserRepository = sequelize.define('User', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    meetUrl: {
+    email: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    meetDate: {
+    birthDate: {
         type: DataTypes.DATE,
         allowNull: false
     },
-    price: {
-        type: DataTypes.FLOAT,
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    role: { // ADMIN / USER
+        type: DataTypes.STRING,
         allowNull: false
     }
 }, {
     timestamps: false
 });
 
-module.exports = MeetRepository;
+module.exports = UserRepository;

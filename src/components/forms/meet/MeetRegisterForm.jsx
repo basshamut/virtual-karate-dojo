@@ -1,12 +1,13 @@
-import {InputText} from "primereact/inputtext";
-import {Button} from "primereact/button";
-import {useState} from "react";
-import {Calendar} from "primereact/calendar";
+import {InputText} from "primereact/inputtext"
+import {Button} from "primereact/button"
+import {useState} from "react"
+import {Calendar} from "primereact/calendar"
 
-export default function RegisterForm() {
-    const today = new Date();
-    const [date, setDate] = useState(today);
-    const [url, setUrl] = useState('');
+export default function MeetRegisterForm() {
+    const today = new Date()
+    const [date, setDate] = useState(today)
+    const [url, setUrl] = useState('')
+    const [price, setPrice] = useState(0)
 
     function saveMeet() {
         fetch('http://localhost:5000/api/meets', {
@@ -14,21 +15,21 @@ export default function RegisterForm() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ meetUrl: url, meetDate: date })
+            body: JSON.stringify({ meetUrl: url, meetDate: date, price: price })
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Network response was not ok')
                 }
-                return response.json();
+                return response.json()
             })
-            .then(data => {
-                setUrl('');
-                setDate(today);
+            .then(() => {
+                setUrl('')
+                setDate(today)
             })
             .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
+                console.error('There was a problem with the fetch operation:', error)
+            })
     }
 
     return (
@@ -46,6 +47,15 @@ export default function RegisterForm() {
                 />
             </div>
             <div className="inline-flex flex-column gap-2">
+                <label htmlFor="url" className="text-primary-50 font-semibold">
+                    Costo(€)
+                </label>
+                <InputText id="price" label="Costo" placeholder={"0.0"}
+                           className="bg-white-alpha-20 border-none p-3 text-primary-50"
+                           onChange={event => setPrice(parseFloat(event.target.value))}
+                />
+            </div>
+            <div className="inline-flex flex-column gap-2">
                 <label htmlFor="meetDate" className="text-primary-50 font-semibold">
                     Meet Date
                 </label>
@@ -56,5 +66,5 @@ export default function RegisterForm() {
                         className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"/>
             </div>
         </div>
-    );
+    )
 }

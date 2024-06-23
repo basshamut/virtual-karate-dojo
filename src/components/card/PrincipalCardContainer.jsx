@@ -1,54 +1,36 @@
+import PaymentCard from "../payment/PaymentCard.jsx";
+import MeetRegisterForm from "../forms/meet/MeetRegisterForm.jsx";
+import { hasSession, isAdmin, isUser } from "../../utils/session.jsx";
+import useFetchMeets from '../../hooks/useFetchMeets';
+
 export default function PrincipalCardContainer() {
-    const [meets, setMeets] = useState([])
+    const userSession = hasSession();
+    const isUserValue = isUser();
+    const isAdminValue = isAdmin();
+    const { meets, error } = useFetchMeets(isUserValue, userSession);
 
-    function isUser() {
-        const sessionData = getSession()
-        return sessionData.role === 'USER';
+    if (error) {
+        return <div>Error: {error.message}</div>;
     }
-
-    function isAdmin() {
-        const sessionData = getSession()
-        return sessionData.role === 'ADMIN';
-    }
-
-    useEffect(() => {
-        async function fetchMeets() {
-            try {
-                const response = await fetch('http://localhost:5000/api/meets/all')
-                const meets = await response.json()
-                console.log('Meets:', meets)
-                setMeets(meets || [])
-            } catch (error) {
-                console.error('Error fetching meets:', error)
-            }
-        }
-
-        fetchMeets()
-    }, [])
 
     return (
         <>
-            {isUser() &&
-                <div className="dashboard-container" style={{textAlign: 'center'}}>
+            {isUserValue && (
+                <div className="dashboard-container" style={{ textAlign: 'center' }}>
                     {meets.map((meet) => (
                         <div className="dashboard-section" key={meet.id}>
-                            <PaymentCard key={meet.id} meet={meet}/>
+                            <PaymentCard key={meet.id} meet={meet} />
                         </div>
                     ))}
                 </div>
-            }
-            {isAdmin() &&
-                <div className="dashboard-container" style={{textAlign: 'center'}}>
+            )}
+            {isAdminValue && (
+                <div className="dashboard-container" style={{ textAlign: 'center' }}>
                     <div className="dashboard-section">
-                        <RegisterForm/>
+                        <MeetRegisterForm />
                     </div>
                 </div>
-            }
+            )}
         </>
-    )
+    );
 }
-import PaymentCard from "../payment/PaymentCard.jsx";
-import RegisterForm from "../forms/register/RegisterForm.jsx";
-import {getSession} from "../../utils/session.jsx";
-
-import {useEffect, useState} from "react";

@@ -1,10 +1,10 @@
-const SESSION_KEY = 'user_session'
 // export const SESSION_DURATION = 60 * 1000 // 1 minuto
 export const SESSION_DURATION = 30 * 60 * 1000 // 30 minutos
+const SESSION_KEY = 'user_session'
 
 export const startSession = (userData) => {
     const sessionData = {
-        userData,
+        userData: userData,
         expiry: new Date().getTime() + SESSION_DURATION
     }
 
@@ -24,4 +24,19 @@ export const getSession = () => {
 
 export const clearSession = () => {
     localStorage.removeItem(SESSION_KEY)
+}
+
+export const hasSession = () => {
+    const sessionData = getSession()
+    return sessionData && sessionData.role
+}
+
+export const isUser = () => {
+    const sessionData = getSession()
+    return sessionData && sessionData.role && sessionData.role === 'USER'
+}
+
+export const isAdmin = () => {
+    const sessionData = getSession()
+    return sessionData && sessionData.role && sessionData.role === 'ADMIN'
 }

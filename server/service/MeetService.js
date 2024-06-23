@@ -5,7 +5,8 @@ const MeetService = {}
 MeetService.save = async function (meet){
     return await meetRepository.create({
         meetUrl: meet.meetUrl,
-        meetDate: new Date( Date.parse(meet.meetDate))
+        meetDate: new Date( Date.parse(meet.meetDate)),
+        price: meet.price
     })
 }
 

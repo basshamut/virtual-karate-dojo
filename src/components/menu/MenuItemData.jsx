@@ -1,5 +1,6 @@
 import {useNavigate} from "react-router-dom"
 import {Button} from "primereact/button";
+import {clearSession} from "../../utils/session.jsx";
 
 export const useMenuItems = () => {
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ export const start = <img alt="logo" src="/Shotokan_Logo.svg" height="40" classN
 export const useEnd = () => {
     const navigate = useNavigate();
     const closeSession = () => {
+        clearSession()
         navigate("/")
     }
 

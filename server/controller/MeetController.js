@@ -8,7 +8,8 @@ router.post('/', (request, response) => {
 
     const meet = {
         meetUrl: request.body.meetUrl,
-        meetDate: request.body.meetDate
+        meetDate: request.body.meetDate,
+        price: request.body.price
     }
 
     const newMeet = meetService.save(meet)
