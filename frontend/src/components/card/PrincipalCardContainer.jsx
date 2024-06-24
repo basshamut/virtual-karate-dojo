@@ -1,7 +1,7 @@
 import PaymentCard from "../payment/PaymentCard.jsx";
 import MeetRegisterForm from "../forms/meet/MeetRegisterForm.jsx";
 import { hasSession, isAdmin, isUser } from "../../utils/session.jsx";
-import useFetchMeets from '../../hooks/useFetchMeets';
+import useFetchMeets from '../../hooks/useFetchMeets.js';
 
 export default function PrincipalCardContainer() {
     const userSession = hasSession();

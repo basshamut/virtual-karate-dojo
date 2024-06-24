@@ -1,7 +1,7 @@
 import {BrowserRouter as Router, Route, Routes, useNavigate} from 'react-router-dom' // Import necessary components
 import {useEffect} from "react"
 import Dashboard from "./pages/dashboard/Dashboard.jsx"
-import {getSession, SESSION_DURATION} from './utils/session'
+import {getSession, SESSION_DURATION} from './utils/session.jsx'
 import './App.css'
 import 'primereact/resources/themes/saga-blue/theme.css'
 import 'primereact/resources/primereact.min.css'

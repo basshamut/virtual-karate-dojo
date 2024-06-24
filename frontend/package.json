@@ -1,13 +1,10 @@
 {
-  "name": "virtual-dojo-spa",
+  "name": "frontend",
   "private": true,
   "version": "1.0.0-SNAPSHOT",
-  "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix server\" \"vite\"",
     "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "dev": "vite"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^2.7.1",

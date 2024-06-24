@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {Menubar} from 'primereact/menubar';
 import PrincipalCardContainer from "../../components/card/PrincipalCardContainer.jsx";
 import InternalDialog from "../../components/dialog/InternalDialog.jsx";
-import {start, useEnd, useMenuItems} from "../../components/menu/MenuItemData";
+import {start, useEnd, useMenuItems} from "../../components/menu/MenuItemData.jsx";
 import {hasSession} from "../../utils/session.jsx";
 import './Dashboard.css'
 import background from "/Shotokan_Fondo.svg";
