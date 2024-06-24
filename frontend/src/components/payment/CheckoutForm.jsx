@@ -5,11 +5,14 @@ import {getSession} from "../../utils/session.jsx";
 
 // eslint-disable-next-line react/prop-types
 export default function CheckoutForm({meet}) {
+    // const domain = "http://localhost:5000"
+    const domain = "http://86.38.204.61"
+
     const stripePromise = loadStripe("pk_test_51PSHknKnVUk9u0R7xWznb2PU2LeYeOgFXDVB14wP4BvJQBJ3RdH0ZLF801Ka7oLlNd7pFV7VZndQa2soCDluMFf200UugFXgnD")
     const user = getSession()
 
     const fetchSessionId = useCallback(() => {
-        return fetch("http://localhost:5000/api/stripe/create-checkout-session", {
+        return fetch(domain + "/api/stripe/create-checkout-session", {
             method: "POST",
             body: JSON.stringify({
                 // eslint-disable-next-line react/prop-types
@@ -60,7 +63,8 @@ export default function CheckoutForm({meet}) {
                 <h2>Clase de Karate</h2>
                 {/* eslint-disable-next-line react/prop-types */}
                 <h2>Fecha: {format(meet.meetDate, 'dd/MM/yyyy HH:mm')}</h2>
-                <p>Precio: <strong>15 €</strong></p>
+                {/* eslint-disable-next-line react/prop-types */}
+                <p>Precio: <strong>{meet.price} €</strong></p>
                 <button onClick={handleCheckout} style={{ backgroundColor: 'black', color: 'white', padding: '10px 20px', fontSize: '16px' }}>
                     Comprar
                 </button>

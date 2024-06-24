@@ -3,6 +3,9 @@ const router = express.Router()
 
 const stripe = require('stripe')('sk_test_51PSHknKnVUk9u0R7NE00UeVyiOzpnfGxGYnLG6ViHxy2eOpDXfYCQTU28Xnfuh9MPvg7qwi5hQp4ArEBjJhjv73z005BOmZJSK')
 
+// const domain = "http://localhost:5173"
+const domain = "http://86.38.204.61"
+
 router.post('/create-checkout-session', async (req, res) => {
     //TODO encriptar y parsear a bse64 datos del retorno de la respuesta
     try {
@@ -17,8 +20,8 @@ router.post('/create-checkout-session', async (req, res) => {
                 },
             ],
             mode: 'payment',
-            success_url: 'http://localhost:5173/dashboard?state=succeeded&meetId=' + meetId + '&userId=' + userId,
-            cancel_url: 'http://localhost:5173/dashboard?state=canceled&meetId=' + meetId + '&userId=' + userId,
+            success_url: domain + '/virtual-dojo/frontend/dashboard?state=succeeded&meetId=' + meetId + '&userId=' + userId,
+            cancel_url:  domain + '/virtual-dojo/frontend/dashboard?state=canceled&meetId=' + meetId + '&userId=' + userId,
         })
 
         res.json({sessionId: session.id})

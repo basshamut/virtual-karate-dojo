@@ -8,14 +8,16 @@ export default function MeetRegisterForm() {
     const [date, setDate] = useState(today)
     const [url, setUrl] = useState('')
     const [price, setPrice] = useState(0)
+    // const domain = "http://localhost:5000"
+    const domain = "http://86.38.204.61"
 
     function saveMeet() {
-        fetch('http://localhost:5000/api/meets', {
+        fetch(domain + '/api/meets', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ meetUrl: url, meetDate: date, price: price })
+            body: JSON.stringify({meetUrl: url, meetDate: date, price: price})
         })
             .then(response => {
                 if (!response.ok) {
@@ -59,7 +61,8 @@ export default function MeetRegisterForm() {
                 <label htmlFor="meetDate" className="text-primary-50 font-semibold">
                     Meet Date
                 </label>
-                <Calendar id="meetDate" value={date} onChange={(e) => setDate(e.value)} dateFormat="dd/mm/yy" minDate={today} showTime hourFormat="24"/>
+                <Calendar id="meetDate" value={date} onChange={(e) => setDate(e.value)} dateFormat="dd/mm/yy"
+                          minDate={today} showTime hourFormat="24"/>
             </div>
             <div className="flex align-items-center gap-2">
                 <Button label="Registrar" onClick={saveMeet} text

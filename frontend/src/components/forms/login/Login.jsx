@@ -12,6 +12,8 @@ export default function Login() {
     const navigate = useNavigate()
     const [user, setUser] = useState("")
     const [password, setPassword] = useState("")
+    // const domain = 'http://localhost:5000'
+    const domain = "http://86.38.204.61"
 
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -20,7 +22,7 @@ export default function Login() {
 
     function doLogin() {
         if (validateEmail(user)) {
-            fetch('http://localhost:5000/api/users/login', {
+            fetch(domain + '/api/users/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -35,7 +37,7 @@ export default function Login() {
                 })
                 .then(data => {
                     startSession(data)
-                    navigate("/dashboard")
+                    navigate("/virtual-dojo/frontend/dashboard")
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error)
@@ -47,7 +49,7 @@ export default function Login() {
 
     function doRegister() {
         setVisible(false)
-        navigate("/register")
+        navigate("/virtual-dojo/frontend/register")
     }
 
     return (

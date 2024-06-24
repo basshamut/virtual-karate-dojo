@@ -25,7 +25,7 @@ export default function Dashboard() {
     }
     useEffect(() => {
         if (!hasSession()) {
-            navigate('/login')
+            navigate('/virtual-dojo/frontend/login')
         }
         setMeetId(params.get('meetId'))
         setUserId(params.get('userId'))

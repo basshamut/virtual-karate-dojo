@@ -3,12 +3,12 @@ import {useEffect, useState} from "react"
 function useSavePurchase(isSuccess, meetId, userId) {
     const [response, setResponse] = useState({})
     const [error, setError] = useState(null);
-
-
+    // const domain = 'http://localhost:5000'
+    const domain = 'http://86.38.204.61'
     useEffect(() => {
         async function savePurchase() {
             try {
-                const response = await fetch('http://localhost:5000/api/purchases', {
+                const response = await fetch(domain + '/api/purchases', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

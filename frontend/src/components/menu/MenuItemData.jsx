@@ -9,25 +9,25 @@ export const useMenuItems = () => {
             label: 'Inicio',
             icon: 'pi pi-home',
             command: () => {
-                navigate('/dashboard')
+                navigate('/virtual-dojo/frontend/dashboard')
             }
         },
         {
             label: 'Productos',
             icon: 'pi pi-shopping-cart',
             command: () => {
-                navigate('/dashboard') //TODO ver hacia donde va redirigirse
+                navigate('/virtual-dojo/frontend/dashboard') //TODO ver hacia donde va redirigirse
             }
         }
     ];
 };
 
-export const start = <img alt="logo" src="/Shotokan_Logo.svg" height="40" className="mr-2"></img>;
+export const start = <img alt="logo" src="Shotokan_Logo.svg" height="40" className="mr-2"></img>;
 export const useEnd = () => {
     const navigate = useNavigate();
     const closeSession = () => {
         clearSession()
-        navigate("/")
+        navigate("/virtual-dojo/frontend")
     }
 
     return (

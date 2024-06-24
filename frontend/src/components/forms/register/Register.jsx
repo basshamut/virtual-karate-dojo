@@ -14,6 +14,8 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [errors, setErrors] = useState({})
     const navigate = useNavigate()
+    // const domain = 'http://localhost:5000'
+    const domain = "http://86.38.204.61"
 
     const today = new Date()
     const majorityAgeDate = new Date(today.getFullYear() - 18, 0, 1)
@@ -59,7 +61,7 @@ export default function Register() {
 
     function doRegister() {
         if (validateForm()) {
-            fetch('http://localhost:5000/api/users/register', {
+            fetch(domain + '/api/users/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -73,7 +75,7 @@ export default function Register() {
                 })
                 .then(() => {
                     setVisible(false)
-                    navigate("/login")
+                    navigate("/virtual-dojo/frontend/login")
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error)
