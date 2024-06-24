@@ -35,13 +35,15 @@ export default function MeetRegisterForm() {
     }
 
     return (
-        <div style={{
-            borderRadius: '12px',
-            backgroundImage: 'radial-gradient(circle at left top, var(--primary-400), var(--primary-700))'
+        <div id="register" style={{
+            backgroundImage: 'radial-gradient(circle at left top, var(--primary-400), var(--primary-700))',
+            color: 'white',
+            padding: '20px',
+            textAlign: 'center'
         }}>
             <div className="inline-flex flex-column gap-2">
                 <label htmlFor="url" className="text-primary-50 font-semibold">
-                    Direccion de la Reunion Online
+                    Dirección de la Reunión Online
                 </label>
                 <InputText id="url" label="Url" placeholder={"https://meet.google.com/..."}
                            className="bg-white-alpha-20 border-none p-3 text-primary-50"
@@ -49,8 +51,8 @@ export default function MeetRegisterForm() {
                 />
             </div>
             <div className="inline-flex flex-column gap-2">
-                <label htmlFor="url" className="text-primary-50 font-semibold">
-                    Costo(€)
+                <label htmlFor="price" className="text-primary-50 font-semibold">
+                    Costo (€)
                 </label>
                 <InputText id="price" label="Costo" placeholder={"0.0"}
                            className="bg-white-alpha-20 border-none p-3 text-primary-50"
@@ -59,7 +61,7 @@ export default function MeetRegisterForm() {
             </div>
             <div className="inline-flex flex-column gap-2">
                 <label htmlFor="meetDate" className="text-primary-50 font-semibold">
-                    Meet Date
+                    Fecha de la Reunión
                 </label>
                 <Calendar id="meetDate" value={date} onChange={(e) => setDate(e.value)} dateFormat="dd/mm/yy"
                           minDate={today} showTime hourFormat="24"/>
@@ -69,5 +71,6 @@ export default function MeetRegisterForm() {
                         className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"/>
             </div>
         </div>
+
     )
 }
