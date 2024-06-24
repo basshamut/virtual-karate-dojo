@@ -35,10 +35,7 @@ export default function MeetRegisterForm() {
     }
 
     return (
-        <div className="flex flex-column px-8 py-5 gap-4" style={{
-            borderRadius: '12px',
-            backgroundImage: 'radial-gradient(circle at left top, var(--primary-400), var(--primary-700))'
-        }}>
+        <div style={{ backgroundImage: 'radial-gradient(circle at left top, var(--primary-400), var(--primary-700))', color: 'white', padding: '20px', textAlign: 'center' }}>
             <div className="inline-flex flex-column gap-2">
                 <label htmlFor="url" className="text-primary-50 font-semibold">
                     Direccion de la Reunion Online
