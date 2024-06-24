@@ -5,18 +5,19 @@ on:
   push:
     branches: [ main ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# A workflow run is made up of one or more jobs that can run sequentially o en paralelo
 jobs:
   build:
-    # The type of runner that the job will run on
+    # El tipo de runner que el trabajo usará
     runs-on: ubuntu-latest
 
+    # Variables de entorno
     env:
       SSH_HOST: srv503843.hstgr.cloud
       SSH_USERNAME: root
       SSH_PASSWORD: sep11Jes.170211
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # Los pasos representan una secuencia de tareas que se ejecutarán como parte del trabajo
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -42,27 +43,24 @@ jobs:
           npm install
 
       - name: Deploy using ssh
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ env.SSH_HOST }}
-          username: ${{ env.SSH_USERNAME }}
-          password: ${{ env.SSH_PASSWORD }}
-          port: 22
-          script: |
-            # Crear directorios en el VPS
-            mkdir -p /var/www/html/virtual-dojo/frontend
-            mkdir -p /var/www/html/virtual-dojo/backend
+        env:
+          SSH_HOST: ${{ env.SSH_HOST }}
+          SSH_USERNAME: ${{ env.SSH_USERNAME }}
+          SSH_PASSWORD: ${{ env.SSH_PASSWORD }}
+        run: |
+          # Crear directorios en el VPS
+          sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST "mkdir -p /var/www/html/virtual-dojo/frontend /var/www/html/virtual-dojo/backend"
 
-            # Copiar el build del frontend al VPS
-            rsync -avz --delete ./frontend/dist/ $USERNAME@$HOST:/var/www/html/virtual-dojo/frontend
+          # Copiar el build del frontend al VPS
+          sshpass -p $SSH_PASSWORD rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./frontend/dist/ $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/frontend
 
-            # Copiar el backend al VPS
-            rsync -avz --delete ./backend/ $USERNAME@$HOST:/var/www/html/virtual-dojo/backend
+          # Copiar el backend al VPS
+          sshpass -p $SSH_PASSWORD rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./backend/ $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/backend
 
-            # Conectar al VPS y reiniciar el backend
-            ssh $USERNAME@$HOST << 'EOF'
-            cd /var/www/html/virtual-dojo/backend
-            npm install --only=prod
-            pm2 restart all || pm2 start server.js --name virtual-dojo
-            exit
-            EOF
+          # Conectar al VPS y reiniciar el backend
+          sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST << 'EOF'
+          cd /var/www/html/virtual-dojo/backend
+          npm install --only=prod
+          pm2 restart all || pm2 start server.js --name virtual-dojo
+          exit
+          EOF
