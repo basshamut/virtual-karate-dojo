@@ -54,13 +54,13 @@ jobs:
             mkdir -p /var/www/html/virtual-dojo/backend
 
             # Copiar el build del frontend al VPS
-            rsync -avz --delete ./frontend/dist/ $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/frontend
+            rsync -avz --delete ./frontend/dist/ $USERNAME@$HOST:/var/www/html/virtual-dojo/frontend
 
             # Copiar el backend al VPS
-            rsync -avz --delete ./backend/ $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/backend
+            rsync -avz --delete ./backend/ $USERNAME@$HOST:/var/www/html/virtual-dojo/backend
 
             # Conectar al VPS y reiniciar el backend
-            ssh $SSH_USERNAME@$SSH_HOST << 'EOF'
+            ssh $USERNAME@$HOST << 'EOF'
             cd /var/www/html/virtual-dojo/backend
             npm install --only=prod
             pm2 restart all || pm2 start server.js --name virtual-dojo
