@@ -43,6 +43,10 @@ jobs:
         run: sudo apt-get install -y sshpass
 
       - name: Deploy to VPS
+        env:
+          SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
+          SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
         run: |
           # Crear directorios en el VPS
           sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/frontend /var/www/html/virtual-dojo/backend'
