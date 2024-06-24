@@ -1,14 +1,23 @@
-name: Deploy to VPS
+name: Node.js CD
 
+# Controls when the action will run.
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  deploy:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    env:
+      SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
+      SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
+      SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -16,13 +25,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '22'  # O la versión que uses
+          node-version: '14'  # O la versión que uses
 
-      - name: Install dependencies
+      - name: Install dependencies for frontend
         run: |
           cd frontend
-          npm install
-          cd ../backend
           npm install
 
       - name: Build frontend
@@ -30,31 +37,33 @@ jobs:
           cd frontend
           npm run build
 
-      - name: Deploy to VPS
-        env:
-          SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
-          SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
-          SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
+      - name: Install dependencies for backend
         run: |
-          sudo apt-get install -y sshpass
-
-          # Crear directorios en el VPS
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST << 'EOF'
-          mkdir -p /var/www/html/virtual-dojo/frontend
-          mkdir -p /var/www/html/virtual-dojo/backend
-          exit
-          EOF
-
-          # Copiar el build del frontend al VPS
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./frontend/dist/* $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/frontend
-
-          # Copiar el backend al VPS
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./backend/* $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/backend
-
-          # Conectar al VPS y reiniciar el backend
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST << 'EOF'
-          cd /var/www/html/virtual-dojo/backend
+          cd backend
           npm install
-          pm2 restart all || pm2 start server.js --name virtual-dojo
-          exit
-          EOF
+
+      - name: Deploy using ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USERNAME }}
+          password: ${{ env.SSH_PASSWORD }}
+          port: 22
+          script: |
+            # Crear directorios en el VPS
+            mkdir -p /var/www/html/virtual-dojo/frontend
+            mkdir -p /var/www/html/virtual-dojo/backend
+
+            # Copiar el build del frontend al VPS
+            rsync -avz --delete ./frontend/dist/ $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/frontend
+
+            # Copiar el backend al VPS
+            rsync -avz --delete ./backend/ $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/backend
+
+            # Conectar al VPS y reiniciar el backend
+            ssh $SSH_USERNAME@$SSH_HOST << 'EOF'
+            cd /var/www/html/virtual-dojo/backend
+            npm install --only=prod
+            pm2 restart all || pm2 start server.js --name virtual-dojo
+            exit
+            EOF
