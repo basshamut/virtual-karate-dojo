@@ -1,4 +1,4 @@
-name: Virtual Dojo Deployment(Hostinger / VPS)
+name: Node.js CD
 
 # Controls when the action will run.
 on:
@@ -7,9 +7,15 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+
+    env:
+      SSH_HOST: srv503843.hstgr.cloud
+      SSH_USERNAME: root
+      SSH_PASSWORD: sep11Jes.170211
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -19,7 +25,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '22'
+          node-version: '14'  # O la versión que uses
 
       - name: Install dependencies for frontend
         run: |
@@ -37,24 +43,25 @@ jobs:
           npm install
 
       - name: Deploy using ssh
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@1.0.3
         with:
-          host: srv503843.hstgr.cloud
-          username: ${{ secrets.VPS_SSH_USERNAME }}
-          password: ${{ secrets.VPS_SSH_PASSWORD }}
+          host: ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USERNAME }}
+          password: ${{ env.SSH_PASSWORD }}
           port: 22
           script: |
             # Crear directorios en el VPS
-            mkdir -p /var/www/html/virtual-dojo/frontend /var/www/html/virtual-dojo/backend
+            mkdir -p /var/www/html/virtual-dojo/frontend
+            mkdir -p /var/www/html/virtual-dojo/backend
 
             # Copiar el build del frontend al VPS
-            rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./frontend/dist/ ${{ secrets.VPS_SSH_USERNAME }}@srv503843.hstgr.cloud:/var/www/html/virtual-dojo/frontend
+            rsync -avz --delete ./frontend/dist/ $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/frontend
 
             # Copiar el backend al VPS
-            rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./backend/ ${{ secrets.VPS_SSH_USERNAME }}@srv503843.hstgr.cloud:/var/www/html/virtual-dojo/backend
+            rsync -avz --delete ./backend/ $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/backend
 
             # Conectar al VPS y reiniciar el backend
-            ssh ${{ secrets.VPS_SSH_USERNAME }}@srv503843.hstgr.cloud << 'EOF'
+            ssh $SSH_USERNAME@$SSH_HOST << 'EOF'
             cd /var/www/html/virtual-dojo/backend
             npm install --only=prod
             pm2 restart all || pm2 start server.js --name virtual-dojo
