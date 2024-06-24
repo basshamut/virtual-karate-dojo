@@ -34,13 +34,11 @@ jobs:
 
       - name: Build frontend
         run: |
-          cd frontend
-          npm run build
+          npm run build:frontend
 
       - name: Install dependencies for backend
         run: |
-          cd backend
-          npm install
+          npm install:backend
 
       - name: Install sshpass
         run: sudo apt-get install -y sshpass
