@@ -42,6 +42,9 @@ jobs:
           cd backend
           npm install
 
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+
       - name: Deploy using ssh
         env:
           SSH_HOST: ${{ env.SSH_HOST }}
