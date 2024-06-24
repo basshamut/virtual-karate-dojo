@@ -11,12 +11,6 @@ jobs:
     # El tipo de runner que el trabajo usará
     runs-on: ubuntu-latest
 
-    # Variables de entorno
-    env:
-      SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
-      SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
-      SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
-
     # Los pasos representan una secuencia de tareas que se ejecutarán como parte del trabajo
     steps:
       - name: Checkout repository
@@ -43,10 +37,15 @@ jobs:
         run: sudo apt-get install -y sshpass
 
       - name: Deploy to VPS
+        # Variables de entorno
+#        env:
+#          SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
+#          SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
+#          SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
         env:
-          SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
-          SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
-          SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
+          SSH_HOST: srv503843.hstgr.cloud
+          SSH_USERNAME: root
+          SSH_PASSWORD: sep11Jes.170211
         run: |
           # Crear directorios en el VPS
           sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/frontend /var/www/html/virtual-dojo/backend'
