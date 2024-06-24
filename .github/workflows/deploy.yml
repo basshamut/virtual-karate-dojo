@@ -1,0 +1,61 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # O la versión que uses
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+          cd ../backend
+          npm install
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Deploy to VPS
+        env:
+          SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
+          SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          sudo apt-get install -y sshpass
+
+          # Crear directorios en el VPS
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST << 'EOF'
+          mkdir -p /var/www/html/virtual-dojo/frontend
+          mkdir -p /var/www/html/virtual-dojo/backend
+          exit
+          EOF
+
+          # Copiar el build del frontend al VPS
+          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./frontend/dist/* $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/frontend
+
+          # Copiar el backend al VPS
+          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./backend/* $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/backend
+
+          # Conectar al VPS y reiniciar el backend
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST << 'EOF'
+          cd /var/www/html/virtual-dojo/backend
+          npm install
+          pm2 restart all || pm2 start server.js --name virtual-dojo
+          exit
+          EOF
