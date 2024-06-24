@@ -1,4 +1,4 @@
-name: Node.js CD
+name: Virtual Dojo Deployment(Hostinger / VPS)
 
 # Controls when the action will run.
 on:
@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'  # O la versión que uses
+          node-version: '22'
 
       - name: Install dependencies for frontend
         run: |
@@ -41,11 +41,11 @@ jobs:
         with:
           host: ${{ secrets.VPS_SSH_HOST }}
           username: ${{ secrets.VPS_SSH_USERNAME }}
-          password: ${{ secrets.VPS_SSH_PASSWORD }}
+          password: ${{ secrets.VPS_SSH_PASSWORD }}  # Consider using SSH key for better security
           port: 22
           script: |
             # Crear directorios en el VPS
-            ssh ${{ secrets.VPS_SSH_USERNAME }}@${{ secrets.VPS_SSH_HOST }} "mkdir -p /var/www/html/virtual-dojo/frontend /var/www/html/virtual-dojo/backend"
+            mkdir -p /var/www/html/virtual-dojo/frontend /var/www/html/virtual-dojo/backend
 
             # Copiar el build del frontend al VPS
             rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./frontend/dist/ ${{ secrets.VPS_SSH_USERNAME }}@${{ secrets.VPS_SSH_HOST }}:/var/www/html/virtual-dojo/frontend
