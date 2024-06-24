@@ -42,26 +42,22 @@ jobs:
       - name: Install sshpass
         run: sudo apt-get install -y sshpass
 
-      - name: Deploy using ssh
-        env:
-          SSH_HOST: ${{ env.SSH_HOST }}
-          SSH_USERNAME: ${{ env.SSH_USERNAME }}
-          SSH_PASSWORD: ${{ env.SSH_PASSWORD }}
+      - name: Deploy using sshpass
         run: |
-          # Crear directorios en el VPS
-          sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST "mkdir -p /var/www/html/virtual-dojo/frontend /var/www/html/virtual-dojo/backend"
+          # Create directories on the VPS
+          sshpass -p "${SSH_PASSWORD}" ssh "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/frontend /var/www/html/virtual-dojo/backend'
 
-          # Copiar el build del frontend al VPS
-          sshpass -p $SSH_PASSWORD rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./frontend/dist/ $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/frontend
+          # Copy frontend build to the VPS
+          rsync -avz --delete -e "sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no" ./frontend/dist/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/frontend"
 
-          # Copiar el backend al VPS
-          sshpass -p $SSH_PASSWORD rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./backend/ $SSH_USERNAME@$SSH_HOST:/var/www/html/virtual-dojo/backend
+          # Copy backend to the VPS
+          rsync -avz --delete -e "sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no" ./backend/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/backend"
 
-          # Conectar al VPS y reiniciar el backend
-          sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST << 'EOF'
-          cd /var/www/html/virtual-dojo/backend
-          npm install -g pm2
-          npm install --only=prod
-          pm2 restart all || pm2 start index.js --name virtual-dojo
-          exit
+          # Connect to the VPS and restart the backend
+          sshpass -p "${SSH_PASSWORD}" ssh "${SSH_USERNAME}@${SSH_HOST}" << 'EOF'
+            cd /var/www/html/virtual-dojo/backend
+            npm install pm2 -g
+            npm install --only=prod
+            pm2 restart all || pm2 start server.js --name virtual-dojo
+            exit
           EOF
