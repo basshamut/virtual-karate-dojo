@@ -45,3 +45,7 @@ export const getBase64CredentialsFromSession = () => {
     const sessionData = getSession()
     return btoa(sessionData.email + ':' + sessionData.password)
 }
+
+export const getApplicationDomain = () => {
+    return import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : 'http://86.38.204.61'
+}

@@ -5,6 +5,7 @@ import {useState} from "react"
 import background from "/Shotokan_Fondo.svg"
 import {Calendar} from "primereact/calendar"
 import {useNavigate} from "react-router-dom";
+import {getApplicationDomain} from "../../../utils/session";
 
 export default function Register() {
     const [visible, setVisible] = useState(true)
@@ -14,7 +15,7 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [errors, setErrors] = useState({})
     const navigate = useNavigate()
-    const domain = import.meta.env.VITE_API_URL
+    const domain = getApplicationDomain()
 
     const today = new Date()
     const majorityAgeDate = new Date(today.getFullYear() - 18, 0, 1)

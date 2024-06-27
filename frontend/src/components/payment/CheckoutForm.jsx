@@ -1,11 +1,11 @@
 import {useCallback} from "react"
 import {loadStripe} from '@stripe/stripe-js'
 import {format} from "date-fns"
-import {getBase64CredentialsFromSession, getSession} from "../../utils/session.jsx";
+import {getApplicationDomain, getBase64CredentialsFromSession, getSession} from "../../utils/session.jsx";
 
 // eslint-disable-next-line react/prop-types
 export default function CheckoutForm({meet}) {
-    const domain = import.meta.env.VITE_API_URL
+    const domain = getApplicationDomain()
 
     const stripePromise = loadStripe("pk_test_51PSHknKnVUk9u0R7xWznb2PU2LeYeOgFXDVB14wP4BvJQBJ3RdH0ZLF801Ka7oLlNd7pFV7VZndQa2soCDluMFf200UugFXgnD")
     const user = getSession()

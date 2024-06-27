@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react"
-import {getBase64CredentialsFromSession} from "../utils/session";
+import {getApplicationDomain, getBase64CredentialsFromSession} from "../utils/session";
 
 function useSavePurchase(isSuccess, meetId, userId) {
     const [response, setResponse] = useState({})
     const [error, setError] = useState(null);
-    const domain = import.meta.env.VITE_API_URL
+    const domain = getApplicationDomain()
     const base64Credentials = getBase64CredentialsFromSession()
 
     useEffect(() => {

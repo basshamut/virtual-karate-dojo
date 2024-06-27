@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {getBase64CredentialsFromSession} from "../utils/session";
+import {getApplicationDomain, getBase64CredentialsFromSession} from "../utils/session";
 
 function useFetchMeets(isUser, hasSession) {
     const [meets, setMeets] = useState([]);
@@ -9,7 +9,7 @@ function useFetchMeets(isUser, hasSession) {
     useEffect(() => {
         async function fetchMeets() {
             try {
-                const domain = import.meta.env.VITE_API_URL
+                const domain = getApplicationDomain()
                 console.log("Domain: " + domain)
                 const response = await fetch(domain + '/api/meets/all', {
                     headers: {

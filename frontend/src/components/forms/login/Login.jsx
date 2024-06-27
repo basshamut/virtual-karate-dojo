@@ -3,7 +3,7 @@ import {Dialog} from 'primereact/dialog'
 import {InputText} from "primereact/inputtext"
 import {useState} from "react"
 import {useNavigate} from "react-router-dom"
-import {startSession} from "../../../utils/session.jsx"
+import {getApplicationDomain, startSession} from "../../../utils/session.jsx"
 import background from "/Shotokan_Fondo.svg"
 
 
@@ -20,7 +20,7 @@ export default function Login() {
 
     function doLogin() {
         if (validateEmail(user)) {
-            const domain = import.meta.env.VITE_API_URL
+            const domain = getApplicationDomain()
             console.log("Domain: " + domain)
             fetch(domain + '/api/users/login', {
                 method: 'POST',
