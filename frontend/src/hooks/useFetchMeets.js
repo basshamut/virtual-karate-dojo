@@ -5,6 +5,7 @@ function useFetchMeets(isUser, hasSession) {
     const [meets, setMeets] = useState([]);
     const [error, setError] = useState(null);
     const domain = import.meta.env.VITE_API_URL
+    console.log(domain)
     const base64Credentials = getBase64CredentialsFromSession()
 
     useEffect(() => {
