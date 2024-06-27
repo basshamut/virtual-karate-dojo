@@ -21,7 +21,7 @@ export default function Login() {
 
     function doLogin() {
         if (validateEmail(user)) {
-            fetch(domain + '/api/users/login', {
+            fetch(domain + 'http://86.38.204.61/api/users/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
