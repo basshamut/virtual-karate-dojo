@@ -12,7 +12,6 @@ export default function Login() {
     const navigate = useNavigate()
     const [user, setUser] = useState("")
     const [password, setPassword] = useState("")
-    const domain = import.meta.env.VITE_API_URL
 
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -21,6 +20,7 @@ export default function Login() {
 
     function doLogin() {
         if (validateEmail(user)) {
+            const domain = import.meta.env.VITE_API_URL
             fetch(domain + '/api/users/login', {
                 method: 'POST',
                 headers: {
