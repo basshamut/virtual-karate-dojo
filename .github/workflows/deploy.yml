@@ -66,7 +66,7 @@ jobs:
           # Crear el archivo .env para el backend
           sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<EOF
             echo "PORT=${PORT}" > /var/www/html/virtual-dojo/backend/.env
-            echo "DATABASE_URL=${DATABASE_URL}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "DATA_BASE_URL=${DATA_BASE_URL}" >> /var/www/html/virtual-dojo/backend/.env
             echo "FRONTEND_URL=${FRONTEND_URL}" >> /var/www/html/virtual-dojo/backend/.env
             echo "STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}" >> /var/www/html/virtual-dojo/backend/.env
           EOF          
