@@ -12,8 +12,7 @@ export default function Login() {
     const navigate = useNavigate()
     const [user, setUser] = useState("")
     const [password, setPassword] = useState("")
-    // const domain = 'http://localhost:5000'
-    const domain = "http://86.38.204.61"
+    const domain = import.meta.env.VITE_API_URL
 
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -27,7 +26,10 @@ export default function Login() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({user, password})
+                body: JSON.stringify({
+                    user: user,
+                    password: btoa(password)
+                })
             })
                 .then(async response => {
                     if (!response.ok) {
@@ -36,6 +38,7 @@ export default function Login() {
                     return response.json()
                 })
                 .then(data => {
+                    data.password = btoa(password)
                     startSession(data)
                     navigate("/virtual-dojo/frontend/dashboard")
                 })

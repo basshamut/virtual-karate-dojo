@@ -54,7 +54,8 @@ router.post('/register', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-    const { user, password } = req.body
+    const user = req.body.user
+    const password = atob(req.body.password)
 
     const errors = {}
 
@@ -78,6 +79,7 @@ router.post('/login', async (req, res) => {
         return res.status(404).json({ message: 'Usuario o contraseña incorrectos' })
     }
 
+    userFound.password = undefined
     res.status(200).json(userFound)
 })
 

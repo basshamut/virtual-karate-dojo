@@ -1,6 +1,7 @@
 const {Sequelize} = require('sequelize');
 
 const connection = 'postgresql://test_db_owner:Lqn84hbsNPvG@ep-purple-voice-a5bgc10s.us-east-2.aws.neon.tech/test_db?sslmode=require'
+// const connection = process.env.DATABASE_URL
 
 const sequelize = new Sequelize(connection, {
     dialect: 'postgres',

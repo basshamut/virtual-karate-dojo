@@ -14,8 +14,7 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [errors, setErrors] = useState({})
     const navigate = useNavigate()
-    // const domain = 'http://localhost:5000'
-    const domain = "http://86.38.204.61"
+    const domain = import.meta.env.VITE_API_URL
 
     const today = new Date()
     const majorityAgeDate = new Date(today.getFullYear() - 18, 0, 1)

@@ -1,17 +1,21 @@
 import {useEffect, useState} from "react"
+import {getBase64CredentialsFromSession} from "../utils/session";
 
 function useSavePurchase(isSuccess, meetId, userId) {
     const [response, setResponse] = useState({})
     const [error, setError] = useState(null);
-    // const domain = 'http://localhost:5000'
-    const domain = 'http://86.38.204.61'
+    const domain = import.meta.env.VITE_API_URL
+    const base64Credentials = getBase64CredentialsFromSession()
+
     useEffect(() => {
         async function savePurchase() {
             try {
                 const response = await fetch(domain + '/api/purchases', {
+
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Basic ${base64Credentials}`
                     },
                     body: JSON.stringify({  meetId, userId}),
                 })

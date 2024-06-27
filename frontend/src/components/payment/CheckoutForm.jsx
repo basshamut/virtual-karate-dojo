@@ -1,15 +1,15 @@
 import {useCallback} from "react"
 import {loadStripe} from '@stripe/stripe-js'
 import {format} from "date-fns"
-import {getSession} from "../../utils/session.jsx";
+import {getBase64CredentialsFromSession, getSession} from "../../utils/session.jsx";
 
 // eslint-disable-next-line react/prop-types
 export default function CheckoutForm({meet}) {
-    // const domain = "http://localhost:5000"
-    const domain = "http://86.38.204.61"
+    const domain = import.meta.env.VITE_API_URL
 
     const stripePromise = loadStripe("pk_test_51PSHknKnVUk9u0R7xWznb2PU2LeYeOgFXDVB14wP4BvJQBJ3RdH0ZLF801Ka7oLlNd7pFV7VZndQa2soCDluMFf200UugFXgnD")
     const user = getSession()
+    const base64Credentials = getBase64CredentialsFromSession()
 
     const fetchSessionId = useCallback(() => {
         return fetch(domain + "/api/stripe/create-checkout-session", {
@@ -21,6 +21,7 @@ export default function CheckoutForm({meet}) {
             }),
             headers: {
                 "Content-Type": "application/json",
+                'Authorization': `Basic ${base64Credentials}`
             },
         })
             .then((res) => {

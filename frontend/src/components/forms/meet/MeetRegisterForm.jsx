@@ -3,6 +3,7 @@ import { Button } from "primereact/button";
 import { useState } from "react";
 import { Calendar } from "primereact/calendar";
 import styled from 'styled-components';
+import {getBase64CredentialsFromSession} from "../../../utils/session";
 
 const RegisterContainer = styled.div`
     background-image: radial-gradient(circle at left top, var(--primary-400), var(--primary-700));
@@ -56,14 +57,15 @@ export default function MeetRegisterForm() {
     const [date, setDate] = useState(today);
     const [url, setUrl] = useState('');
     const [price, setPrice] = useState(0);
-    // const domain = "http://localhost:5000"
-    const domain = "http://86.38.204.61";
+    const domain = import.meta.env.VITE_API_URL
+    const base64Credentials = getBase64CredentialsFromSession()
 
     function saveMeet() {
         fetch(domain + '/api/meets', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${base64Credentials}`
             },
             body: JSON.stringify({ meetUrl: url, meetDate: date, price: price })
         })

@@ -40,3 +40,8 @@ export const isAdmin = () => {
     const sessionData = getSession()
     return sessionData && sessionData.role && sessionData.role === 'ADMIN'
 }
+
+export const getBase64CredentialsFromSession = () => {
+    const sessionData = getSession()
+    return btoa(sessionData.email + ':' + sessionData.password)
+}
