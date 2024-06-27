@@ -12,7 +12,7 @@ export default function Login() {
     const navigate = useNavigate()
     const [user, setUser] = useState("")
     const [password, setPassword] = useState("")
-    const domain = import.meta.env.VITE_API_URL
+    const domain = "http://86.38.204.61"//import.meta.env.VITE_API_URL
 
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -21,7 +21,7 @@ export default function Login() {
 
     function doLogin() {
         if (validateEmail(user)) {
-            fetch(domain + 'http://86.38.204.61/api/users/login', {
+            fetch(domain + '/api/users/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
