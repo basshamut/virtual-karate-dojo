@@ -12,7 +12,7 @@ export default function Login() {
     const navigate = useNavigate()
     const [user, setUser] = useState("")
     const [password, setPassword] = useState("")
-    const domain = "http://86.38.204.61"//import.meta.env.VITE_API_URL
+    const domain = import.meta.env.VITE_API_URL
 
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/

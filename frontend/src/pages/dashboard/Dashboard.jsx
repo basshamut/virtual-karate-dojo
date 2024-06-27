@@ -18,7 +18,7 @@ export default function Dashboard() {
     const navigate = useNavigate();
     const menuItems = useMenuItems()
     const end = useEnd()
-    const purchase = useSavePurchase(state === 'succeeded', meetId, userId)
+    const purchase = useSavePurchase(state === 'succeeded', meetId, userId)//TODO usar el estado de la compra
 
     const handleDialogClose = () => {
         setVisible(false)
