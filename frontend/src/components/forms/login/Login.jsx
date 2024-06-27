@@ -21,6 +21,7 @@ export default function Login() {
     function doLogin() {
         if (validateEmail(user)) {
             const domain = import.meta.env.VITE_API_URL
+            console.log("Domain: " + domain)
             fetch(domain + '/api/users/login', {
                 method: 'POST',
                 headers: {
