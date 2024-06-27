@@ -4,13 +4,13 @@ import {getBase64CredentialsFromSession} from "../utils/session";
 function useFetchMeets(isUser, hasSession) {
     const [meets, setMeets] = useState([]);
     const [error, setError] = useState(null);
-    const domain = import.meta.env.VITE_API_URL
-    console.log(domain)
     const base64Credentials = getBase64CredentialsFromSession()
 
     useEffect(() => {
         async function fetchMeets() {
             try {
+                const domain = import.meta.env.VITE_API_URL
+                console.log("Domain: " + domain)
                 const response = await fetch(domain + '/api/meets/all', {
                     headers: {
                         'Authorization': `Basic ${base64Credentials}`
