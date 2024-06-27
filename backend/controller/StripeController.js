@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 
-const stripe = require('stripe')('sk_test_51PSHknKnVUk9u0R7NE00UeVyiOzpnfGxGYnLG6ViHxy2eOpDXfYCQTU28Xnfuh9MPvg7qwi5hQp4ArEBjJhjv73z005BOmZJSK')
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 // const domain = "http://localhost:5173"
 // const domain = "http://86.38.204.61"
