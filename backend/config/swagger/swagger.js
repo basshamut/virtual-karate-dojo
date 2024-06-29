@@ -13,8 +13,22 @@ const options = {
             {
                 url: process.env.API_DOMAIN,
                 description: 'Servidor'
+            },
+
+        ],
+        components: {
+            securitySchemes: {
+                basicAuth: {
+                    type: 'http',
+                    scheme: 'basic',
+                },
+            },
+        },
+        security: [
+            {
+                basicAuth: []
             }
-        ]
+        ],
     },
     apis: ['./controller/*.js'] // Archivos donde se definen las rutas
 };

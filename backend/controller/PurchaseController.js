@@ -58,6 +58,8 @@ const PurchaseService = require("../service/PurchaseService");
  *                 error:
  *                   type: string
  *                   example: Error message
+ *     security:
+ *       - basicAuth: []
  */
 router.post('/', async (req, res) => {
     try {

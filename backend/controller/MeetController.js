@@ -49,6 +49,8 @@ const router = express.Router()
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Meet'
+ *     security:
+ *       - basicAuth: []
  */
 router.post('/', (request, response) => {
     response.setHeader('Content-Type', 'application/json')
@@ -104,6 +106,8 @@ router.post('/', (request, response) => {
  *                 message:
  *                   type: string
  *                   example: Meet not found
+ *     security:
+ *       - basicAuth: []
  */
 router.get('/', async (request, response) => {
     const url = request.query.url
@@ -136,6 +140,8 @@ router.get('/', async (request, response) => {
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Meet'
+ *     security:
+ *       - basicAuth: []
  */
 router.get('/all', async (request, response) => {
     const meets = await meetService.getAll()

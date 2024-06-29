@@ -59,6 +59,8 @@ const domain = process.env.FRONTEND_URL;
  *                 error:
  *                   type: string
  *                   example: "Error message"
+ *     security:
+ *       - basicAuth: []
  */
 router.post('/create-checkout-session', async (req, res) => {
     try {
