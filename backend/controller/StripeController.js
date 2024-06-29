@@ -1,17 +1,68 @@
-const express = require("express")
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const domain = process.env.FRONTEND_URL;
 
-// const domain = "http://localhost:5173"
-// const domain = "http://86.38.204.61"
-const domain = process.env.FRONTEND_URL
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     CheckoutSession:
+ *       type: object
+ *       required:
+ *         - meetId
+ *         - userId
+ *       properties:
+ *         meetId:
+ *           type: string
+ *           description: ID of the meeting
+ *         userId:
+ *           type: string
+ *           description: ID of the user
+ *       example:
+ *         meetId: "meet123"
+ *         userId: "user456"
+ */
 
+/**
+ * @swagger
+ * /api/stripe/create-checkout-session:
+ *   post:
+ *     summary: Create a Stripe checkout session
+ *     tags: [Stripe]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CheckoutSession'
+ *     responses:
+ *       200:
+ *         description: Session created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 sessionId:
+ *                   type: string
+ *                   description: ID of the created session
+ *                   example: "cs_test_a1B2c3D4e5F6g7H8i9J0k1L2"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Error message"
+ */
 router.post('/create-checkout-session', async (req, res) => {
-    //TODO encriptar y parsear a bse64 datos del retorno de la respuesta
     try {
-        const meetId = req.body.meetId
-        const userId = req.body.userId
+        const { meetId, userId } = req.body;
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [
@@ -21,14 +72,14 @@ router.post('/create-checkout-session', async (req, res) => {
                 },
             ],
             mode: 'payment',
-            success_url: domain + '/virtual-dojo/frontend/dashboard?state=succeeded&meetId=' + meetId + '&userId=' + userId,
-            cancel_url:  domain + '/virtual-dojo/frontend/dashboard?state=canceled&meetId=' + meetId + '&userId=' + userId,
-        })
+            success_url: `${domain}/virtual-dojo/frontend/dashboard?state=succeeded&meetId=${meetId}&userId=${userId}`,
+            cancel_url: `${domain}/virtual-dojo/frontend/dashboard?state=canceled&meetId=${meetId}&userId=${userId}`,
+        });
 
-        res.json({sessionId: session.id})
+        res.json({ sessionId: session.id });
     } catch (error) {
-        res.status(500).json({error: error.message})
+        res.status(500).json({ error: error.message });
     }
-})
+});
 
-module.exports = router
+module.exports = router;

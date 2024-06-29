@@ -4,11 +4,14 @@ async function interceptorMiddleware(req, res, next) {
     const path = req.path.toLowerCase();
 
     const excludedPaths = [
-        '/api/users/login',
-        '/api/users/register'
+        /^\/api\/users\/login$/,
+        /^\/api\/users\/register$/,
+        /^\/api\/users\/validate$/,
     ];
 
-    if (!excludedPaths.includes(path)) {
+    const isExcluded = excludedPaths.some((pattern) => pattern.test(path));
+
+    if (!isExcluded) {
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Basic ')) {
             return res.status(401).json({ message: 'Unauthorized' });

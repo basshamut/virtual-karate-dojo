@@ -9,6 +9,7 @@ import 'primeflex/primeflex.css'
 import 'primeicons/primeicons.css'
 import Login from "./components/forms/login/Login.jsx"
 import Register from "./components/forms/register/Register.jsx"
+import Validation from "./pages/validation/Validation";
 
 function InnerApp() {
     const navigate = useNavigate()
@@ -29,6 +30,7 @@ function InnerApp() {
             <Routes>
                 <Route path="/virtual-dojo/frontend/login" element={<Login/>}/>
                 <Route path="/virtual-dojo/frontend/register" element={<Register/>}/>
+                <Route path="/virtual-dojo/frontend/validation" element={<Validation/>}/>
                 <Route path="/virtual-dojo/frontend/dashboard" element={<Dashboard/>}/>
                 <Route path="/virtual-dojo/frontend" element={<Login/>}/>
             </Routes>

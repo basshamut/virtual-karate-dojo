@@ -44,10 +44,14 @@ jobs:
           SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
           FRONTEND_API_URL: ${{ secrets.FRONTEND_API_URL }}
           PORT: ${{ secrets.PORT }}
+          API_DOMAIN: ${{ secrets.API_DOMAIN }}
           DATA_BASE_URL: ${{ secrets.DATA_BASE_URL }}
           FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
         run: |
           # Crear directorios en el VPS
           sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/frontend /var/www/html/virtual-dojo/backend'
@@ -69,6 +73,9 @@ jobs:
             echo "DATA_BASE_URL=${DATA_BASE_URL}" >> /var/www/html/virtual-dojo/backend/.env
             echo "FRONTEND_URL=${FRONTEND_URL}" >> /var/www/html/virtual-dojo/backend/.env
             echo "STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "EMAIL_HOST=${EMAIL_HOST}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "EMAIL_USER=${EMAIL_USER}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "EMAIL_PASS=${EMAIL_PASS}" >> /var/www/html/virtual-dojo/backend/.env
           EOF          
           
           # Conectar al VPS y reiniciar el backend

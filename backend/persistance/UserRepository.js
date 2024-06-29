@@ -22,6 +22,11 @@ const UserRepository = sequelize.define('User', {
     role: { // ADMIN / USER
         type: DataTypes.STRING,
         allowNull: false
+    },
+    validated: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     }
 }, {
     timestamps: false
