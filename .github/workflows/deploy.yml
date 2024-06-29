@@ -76,6 +76,7 @@ jobs:
             echo "EMAIL_HOST=${EMAIL_HOST}" >> /var/www/html/virtual-dojo/backend/.env
             echo "EMAIL_USER=${EMAIL_USER}" >> /var/www/html/virtual-dojo/backend/.env
             echo "EMAIL_PASS=${EMAIL_PASS}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "API_DOMAIN=${API_DOMAIN}" >> /var/www/html/virtual-dojo/backend/.env
           EOF          
           
           # Conectar al VPS y reiniciar el backend
