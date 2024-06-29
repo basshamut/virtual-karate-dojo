@@ -5,7 +5,7 @@ const options = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'API',
+            title: 'Virtual Dojo API',
             version: '1.0.0',
             description: 'API para la gestión del Dojo Virtual'
         },
