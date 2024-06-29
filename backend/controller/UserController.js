@@ -110,10 +110,11 @@ function validatePassword(password) {
  *         email: "usuario@example.com"
  *         birthDate: "2000-01-01"
  *         role: "user"
+ */
 
- /**
+/**
  * @swagger
- * /register:
+ * /api/users/register:
  *   post:
  *     summary: Registra un nuevo usuario
  *     tags: [Usuarios]
@@ -122,20 +123,7 @@ function validatePassword(password) {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               user:
- *                 type: string
- *                 description: El email del usuario
- *                 example: "usuario@example.com"
- *               date:
- *                 type: string
- *                 description: Fecha de nacimiento del usuario
- *                 example: "1990-01-01"
- *               password:
- *                 type: string
- *                 description: Contraseña del usuario
- *                 example: "password123"
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       201:
  *         description: Registro exitoso
@@ -143,11 +131,9 @@ function validatePassword(password) {
  *         description: Error en la validación de los datos
  *       409:
  *         description: El email ya está registrado
- *     security:
- *       - basicAuth: []
  */
 router.post('/register', async (req, res) => {
-    const {user, date, password} = req.body;
+    const { user, date, password } = req.body;
 
     const errors = {};
 
@@ -176,21 +162,21 @@ router.post('/register', async (req, res) => {
     }
 
     if (Object.keys(errors).length > 0) {
-        return res.status(400).json({errors});
+        return res.status(400).json({ errors });
     }
 
-    const userFound = await userService.save({email: user, birthDate: date, password});
+    const userFound = await userService.save({ email: user, birthDate: date, password });
     if (userFound === null) {
-        const errorResponse = {message: 'El email ya está registrado'};
+        const errorResponse = { message: 'El email ya está registrado' };
         return res.status(409).json(errorResponse);
     }
 
-    res.status(201).json({message: 'Registro exitoso'});
+    res.status(201).json({ message: 'Registro exitoso' });
 });
 
 /**
  * @swagger
- * /login:
+ * /api/users/login:
  *   post:
  *     summary: Inicia sesión en la aplicación
  *     tags: [Usuarios]
@@ -199,16 +185,7 @@ router.post('/register', async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               user:
- *                 type: string
- *                 description: El email del usuario
- *                 example: "usuario@example.com"
- *               password:
- *                 type: string
- *                 description: Contraseña del usuario
- *                 example: "cGFzc3dvcmQxMjM=" // Base64 encoded
+ *             $ref: '#/components/schemas/UserLogin'
  *     responses:
  *       200:
  *         description: Inicio de sesión exitoso
@@ -216,8 +193,6 @@ router.post('/register', async (req, res) => {
  *         description: Error en la validación de los datos
  *       404:
  *         description: Usuario o contraseña incorrectos
- *     security:
- *       - basicAuth: []
  */
 router.post('/login', async (req, res) => {
     const user = req.body.user;
@@ -236,13 +211,13 @@ router.post('/login', async (req, res) => {
     }
 
     if (Object.keys(errors).length > 0) {
-        return res.status(400).json({errors});
+        return res.status(400).json({ errors });
     }
 
     const userFound = await userService.login(user, password);
 
     if (!userFound) {
-        return res.status(404).json({message: 'Usuario o contraseña incorrectos'});
+        return res.status(404).json({ message: 'Usuario o contraseña incorrectos' });
     }
 
     userFound.password = undefined;
@@ -251,7 +226,7 @@ router.post('/login', async (req, res) => {
 
 /**
  * @swagger
- * /roles:
+ * /api/users/roles:
  *   get:
  *     summary: Obtiene los roles de un usuario
  *     tags: [Usuarios]
@@ -265,8 +240,8 @@ router.post('/login', async (req, res) => {
  *     responses:
  *       200:
  *         description: Roles del usuario
- *     security:
- *       - basicAuth: []
+ *       400:
+ *         description: Error en la solicitud
  */
 router.get('/roles', async (req, res) => {
     const userMail = req.query.userMail;
@@ -276,7 +251,7 @@ router.get('/roles', async (req, res) => {
 
 /**
  * @swagger
- * /validate:
+ * /api/users/validate:
  *   patch:
  *     summary: Valida un usuario
  *     tags: [Usuarios]
@@ -285,12 +260,7 @@ router.get('/roles', async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               userMail:
- *                 type: string
- *                 description: El email del usuario
- *                 example: "usuario@example.com"
+ *             $ref: '#/components/schemas/UserValidation'
  *     responses:
  *       200:
  *         description: Validación exitosa
@@ -298,26 +268,24 @@ router.get('/roles', async (req, res) => {
  *         description: El email ya está validado o no fue proporcionado
  *       404:
  *         description: El email no está registrado
- *     security:
- *       - basicAuth: []
  */
 router.patch('/validate', async (req, res) => {
     const userMail = req.body.userMail;
     if (!userMail) {
-        return res.status(400).json({message: 'El email es requerido'});
+        return res.status(400).json({ message: 'El email es requerido' });
     }
 
     const userExist = await userService.findByEmail(userMail);
     if (!userExist) {
-        return res.status(404).json({message: 'El email no está registrado'});
+        return res.status(404).json({ message: 'El email no está registrado' });
     }
 
     if (userExist.validated) {
-        return res.status(400).json({message: 'El email ya está validado'});
+        return res.status(400).json({ message: 'El email ya está validado' });
     }
 
     await userService.validate(userMail);
-    res.status(200).json({message: 'Validación exitosa'});
+    res.status(200).json({ message: 'Validación exitosa' });
 });
 
 module.exports = router;
