@@ -11,10 +11,9 @@ const options = {
         },
         servers: [
             {
-                url: process.env.API_DOMAIN,
+                url: process.env.API_DOMAIN || 'http://localhost:5000', // Asegúrate de tener una URL por defecto
                 description: 'Servidor'
             },
-
         ],
         components: {
             securitySchemes: {
@@ -36,5 +35,5 @@ const options = {
 const specs = swaggerJsDoc(options);
 
 module.exports = (app) => {
-    app.use('/api/swagger/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+    app.use('/api/swagger/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
 };

@@ -20,10 +20,13 @@ async function interceptorMiddleware(req, res, next) {
         try {
             const authHeaderReplaced = authHeader.replace('Basic ', '');
             const authDecode = Buffer.from(authHeaderReplaced, 'base64').toString('utf-8');
-            const [user, password] = authDecode.split(':');
-            
+            const [user, encodedPassword] = authDecode.split(':');
+
+            // Decodificar la contraseña desde base64
+            const password = Buffer.from(encodedPassword, 'base64').toString('utf-8');
+
             // Validar usuario y contraseña
-            const userFound = await userService.login(user, atob(password));
+            const userFound = await userService.login(user, password);
 
             if (!userFound) {
                 return res.status(401).json({ message: 'Unauthorized' });

@@ -11,14 +11,16 @@ export const useMenuItems = () => {
             command: () => {
                 navigate('/virtual-dojo/frontend/dashboard')
             }
-        },
-        {
-            label: 'Productos',
-            icon: 'pi pi-shopping-cart',
-            command: () => {
-                navigate('/virtual-dojo/frontend/dashboard') //TODO ver hacia donde va redirigirse
-            }
         }
+        //TODO que opciones de menu se podrian agregar?
+        // ,
+        // {
+        //     label: 'Productos',
+        //     icon: 'pi pi-shopping-cart',
+        //     command: () => {
+        //         navigate('/virtual-dojo/frontend/dashboard')
+        //     }
+        // }
     ];
 };
 
