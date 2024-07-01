@@ -58,15 +58,15 @@ jobs:
           # Crear directorios en el VPS
           sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/frontend /var/www/html/virtual-dojo/backend'
 
-          # Copiar el build del frontend al VPS
-          rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no" frontend/dist/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/frontend"
-
           # Crear el archivo .env para el frontend
           sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<EOF
             echo "VITE_API_URL=${VITE_API_URL}" >> /var/www/html/virtual-dojo/frontend/.env
             echo "VITE_SERVICE_USR=${VITE_SERVICE_USR}" >> /var/www/html/virtual-dojo/frontend/.env
             echo "VITE_SERVICE_PASS=${VITE_SERVICE_PASS}" >> /var/www/html/virtual-dojo/frontend/.env
           EOF
+
+          # Copiar el build del frontend al VPS
+          rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no" frontend/dist/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/frontend"
 
           # Copiar el backend al VPS
           rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no" backend/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/backend"
