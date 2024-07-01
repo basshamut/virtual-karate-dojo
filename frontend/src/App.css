@@ -6,15 +6,20 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #fff;
 }
 
 body, html {
-  background-color: #fff;
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
+  background-image: url('../public/Shotokan_Fondo.svg');
+  background-size: cover; /* O puedes usar `contain` dependiendo de tus necesidades */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  background-attachment: fixed; /* Hace que la imagen de fondo permanezca fija al desplazarse */
+  background-position: center; /* Centra la imagen de fondo */
+  margin: 0; /* Asegúrate de que no haya márgenes alrededor del body */
+  height: 100vh; /* Asegúrate de que el body ocupe toda la altura de la ventana */
 }
 
 .logo {
@@ -51,13 +56,4 @@ body, html {
 
 .read-the-docs {
   color: #888;
-}
-
-.background-image {
-  background-image: url('../public/Shotokan_Fondo.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 100%;
-  width: 100%;
 }
