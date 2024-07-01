@@ -19,9 +19,9 @@ jobs:
 
       - name: Install dependencies for frontend
         run: |
-          npm install --prefix frontend
+          npm run install:frontend 
 
-      - name: Create .env file for frontend
+      - name: Create frontend .env file
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_SERVICE_USR: ${{ secrets.VITE_SERVICE_USR }}
@@ -33,11 +33,11 @@ jobs:
 
       - name: Build frontend
         run: |
-          npm run build:frontend --prefix frontend
+          npm run build:frontend
 
       - name: Install dependencies for backend
         run: |
-          npm install --prefix backend
+          npm run install:backend
 
       - name: Install sshpass
         run: sudo apt-get install -y sshpass
