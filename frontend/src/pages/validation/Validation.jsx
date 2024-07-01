@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import { useEffect, useState } from "react"
-import {getApplicationDomain, getBase64CredentialsFromSession} from "../../utils/session"
+import {getApplicationDomain} from "../../utils/session"
 
 export default function Validation() {
     const location = useLocation()

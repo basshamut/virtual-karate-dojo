@@ -43,6 +43,10 @@ export const isAdmin = () => {
 
 export const getBase64CredentialsFromSession = () => {
     const sessionData = getSession()
+    if (!sessionData) {
+        return ''
+    }
+
     return btoa(sessionData.email + ':' + sessionData.password)
 }
 

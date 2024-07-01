@@ -1,12 +1,12 @@
-import { useCallback } from 'react';
-import { getApplicationDomain, getBase64CredentialsFromSession, getSession } from "../utils/session.jsx";
+import {useCallback} from 'react';
+import {getApplicationDomain, getBase64CredentialsFromSession, getSession} from "../utils/session.jsx";
 
 const domain = getApplicationDomain();
 const base64Credentials = getBase64CredentialsFromSession();
 const user = getSession();
 
 const useSessionIds = () => {
-    const fetchSessionId = useCallback((meet) => {
+    return useCallback((meet) => {
         return fetch(domain + "/api/stripe/create-checkout-session", {
             method: "POST",
             body: JSON.stringify({
@@ -35,8 +35,6 @@ const useSessionIds = () => {
                 throw error;
             });
     }, [user.id]);
-
-    return fetchSessionId;
 };
 
 export default useSessionIds;
