@@ -1,17 +1,13 @@
 name: Virtual Dojo Deploy
 
-# Controls when the action will run.
 on:
   push:
     branches: [ main ]
 
-# A workflow run is made up of one or more jobs that can run sequentially o en paralelo
 jobs:
   build:
-    # El tipo de runner que el trabajo usará
     runs-on: ubuntu-latest
 
-    # Los pasos representan una secuencia de tareas que se ejecutarán como parte del trabajo
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -23,7 +19,7 @@ jobs:
 
       - name: Install dependencies for frontend
         run: |
-          npm run install:frontend 
+          npm install
 
       - name: Build frontend
         run: |
@@ -31,29 +27,19 @@ jobs:
 
       - name: Install dependencies for backend
         run: |
-          npm run install:backend
+          npm install --prefix backend
 
       - name: Install sshpass
         run: sudo apt-get install -y sshpass
 
       - name: Deploy to VPS
-        # Variables de entorno
         env:
           SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
           SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
           SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
-          FRONTEND_API_URL: ${{ secrets.FRONTEND_API_URL }}
-          PORT: ${{ secrets.PORT }}
-          API_DOMAIN: ${{ secrets.API_DOMAIN }}
-          DATA_BASE_URL: ${{ secrets.DATA_BASE_URL }}
-          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_SERVICE_USR: ${{ secrets.VITE_SERVICE_USR }}
           VITE_SERVICE_PASS: ${{ secrets.VITE_SERVICE_PASS }}
-          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
-          EMAIL_USER: ${{ secrets.EMAIL_USER }}
-          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
         run: |
           # Crear directorios en el VPS
           sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/frontend /var/www/html/virtual-dojo/backend'
@@ -63,31 +49,40 @@ jobs:
 
           # Crear el archivo .env para el frontend
           sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<EOF
-            echo "VITE_API_URL=${VITE_API_URL}" >> /var/www/html/virtual-dojo/frontend/.env
+            echo "VITE_API_URL=${VITE_API_URL}" > /var/www/html/virtual-dojo/frontend/.env
             echo "VITE_SERVICE_USR=${VITE_SERVICE_USR}" >> /var/www/html/virtual-dojo/frontend/.env
             echo "VITE_SERVICE_PASS=${VITE_SERVICE_PASS}" >> /var/www/html/virtual-dojo/frontend/.env
-          EOF
+  EOF
+  
+  # Verificar el contenido del archivo .env en el VPS
+  sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'cat /var/www/html/virtual-dojo/frontend/.env'
+  
+  # Copiar el backend al VPS
+  rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no" backend/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/backend"
+  
+  # Crear el archivo .env para el backend
+  sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<EOF
+  echo "PORT=${PORT}" > /var/www/html/virtual-dojo/backend/.env
+  echo "DATA_BASE_URL=${DATA_BASE_URL}" >> /var/www/html/virtual-dojo/backend/.env
+  echo "FRONTEND_URL=${FRONTEND_URL}" >> /var/www/html/virtual-dojo/backend/.env
+  echo "STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}" >> /var/www/html/virtual-dojo/backend/.env
+  echo "EMAIL_HOST=${EMAIL_HOST}" >> /var/www/html/virtual-dojo/backend/.env
+  echo "EMAIL_USER=${EMAIL_USER}" >> /var/www/html/virtual-dojo/backend/.env
+  echo "EMAIL_PASS=${EMAIL_PASS}" >> /var/www/html/virtual-dojo/backend/.env
+  echo "API_DOMAIN=${API_DOMAIN}" >> /var/www/html/virtual-dojo/backend/.env
+  EOF
+  
+  # Verificar el contenido del archivo .env para asegurar que se ha creado correctamente
+  sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'cat /var/www/html/virtual-dojo/backend/.env'
+  
+  sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" << 'EOF'
+  cd /var/www/html/virtual-dojo/backend
+  npm install pm2 -g
+  npm install --only=prod
+  pm2 restart all || pm2 start server.js --name virtual-dojo
+  exit
+  EOF
 
-          # Copiar el backend al VPS
-          rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no" backend/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/backend"
-
-          # Crear el archivo .env para el backend
-          sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<EOF
-            echo "PORT=${PORT}" > /var/www/html/virtual-dojo/backend/.env
-            echo "DATA_BASE_URL=${DATA_BASE_URL}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "FRONTEND_URL=${FRONTEND_URL}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "EMAIL_HOST=${EMAIL_HOST}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "EMAIL_USER=${EMAIL_USER}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "EMAIL_PASS=${EMAIL_PASS}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "API_DOMAIN=${API_DOMAIN}" >> /var/www/html/virtual-dojo/backend/.env
-          EOF          
-          
-          # Conectar al VPS y reiniciar el backend
-          sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" << 'EOF'
-            cd /var/www/html/virtual-dojo/backend
-            npm install pm2 -g
-            npm install --only=prod
-            pm2 restart all || pm2 start server.js --name virtual-dojo
-            exit
-          EOF
+# Reiniciar Nginx
+- name: Restart Nginx
+  run: sshpass -p "${{ secrets.VPS_SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.VPS_SSH_USERNAME }}@${{ secrets.VPS_SSH_HOST }}" 'sudo systemctl restart nginx'
