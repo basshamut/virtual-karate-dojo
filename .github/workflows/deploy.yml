@@ -42,7 +42,6 @@ jobs:
             echo "VITE_API_URL=${VITE_API_URL}" >> /var/www/html/virtual-dojo/frontend/.env
             echo "VITE_SERVICE_USR=${VITE_SERVICE_USR}" >> /var/www/html/virtual-dojo/frontend/.env
             echo "VITE_SERVICE_PASS=${VITE_SERVICE_PASS}" >> /var/www/html/virtual-dojo/frontend/.env
-          EOF
 
       - name: Create backend directory and .env file
         env:
@@ -74,7 +73,6 @@ jobs:
             echo "EMAIL_USER=${EMAIL_USER}" >> /var/www/html/virtual-dojo/backend/.env
             echo "EMAIL_PASS=${EMAIL_PASS}" >> /var/www/html/virtual-dojo/backend/.env
             echo "API_DOMAIN=${API_DOMAIN}" >> /var/www/html/virtual-dojo/backend/.env
-          EOF          
 
       - name: Build frontend
         run: |
