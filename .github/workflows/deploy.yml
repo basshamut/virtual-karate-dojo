@@ -26,6 +26,13 @@ jobs:
           npm run install:frontend 
 
       - name: Create frontend directory and .env file
+        env:
+          SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
+          SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_SERVICE_USR: ${{ secrets.VITE_SERVICE_USR }}
+          VITE_SERVICE_PASS: ${{ secrets.VITE_SERVICE_PASS }}
         run: |
           # Crear directorio frontend en el VPS
           sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/frontend'
@@ -38,6 +45,19 @@ jobs:
           EOF
 
       - name: Create backend directory and .env file
+        env:
+          SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
+          SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
+          FRONTEND_API_URL: ${{ secrets.FRONTEND_API_URL }}
+          PORT: ${{ secrets.PORT }}
+          API_DOMAIN: ${{ secrets.API_DOMAIN }}
+          DATA_BASE_URL: ${{ secrets.DATA_BASE_URL }}
+          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
         run: |
           # Crear directorio backend en el VPS
           # Crear directorios en el VPS
@@ -73,18 +93,6 @@ jobs:
           SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
           SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
           SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
-          FRONTEND_API_URL: ${{ secrets.FRONTEND_API_URL }}
-          PORT: ${{ secrets.PORT }}
-          API_DOMAIN: ${{ secrets.API_DOMAIN }}
-          DATA_BASE_URL: ${{ secrets.DATA_BASE_URL }}
-          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
-          VITE_SERVICE_USR: ${{ secrets.VITE_SERVICE_USR }}
-          VITE_SERVICE_PASS: ${{ secrets.VITE_SERVICE_PASS }}
-          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
-          EMAIL_USER: ${{ secrets.EMAIL_USER }}
-          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
         run: |
           # Copiar el build del frontend al VPS
           rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no" frontend/dist/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/frontend"
