@@ -9,8 +9,6 @@ async function interceptorMiddleware(req, res, next) {
         '/api/users/validate'
     ];
 
-    console.log(!excludedPaths.includes(path))
-
     if (!excludedPaths.includes(path)) {
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Basic ')) {

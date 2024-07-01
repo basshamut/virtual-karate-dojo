@@ -10,7 +10,6 @@ function useFetchMeets(isUser, hasSession) {
         async function fetchMeets() {
             try {
                 const domain = getApplicationDomain()
-                console.log("Domain: " + domain)
                 const response = await fetch(domain + '/api/meets/all', {
                     headers: {
                         'Authorization': `Basic ${base64Credentials}`

@@ -14,8 +14,6 @@ import Validation from "./pages/validation/Validation";
 function InnerApp() {
     const navigate = useNavigate()
 
-    console.log(import.meta.env);
-
     useEffect(() => {
         const interval = setInterval(() => {
             const sessionUser = getSession()

@@ -21,7 +21,6 @@ export default function Login() {
         if (validateEmail(user)) {
             const login = btoa(import.meta.env.VITE_SERVICE_USR + ':' + import.meta.env.VITE_SERVICE_PASS)
             const domain = getApplicationDomain()
-            console.log("Domain: " + domain)
             fetch(domain + '/api/users/login', {
                 method: 'POST',
                 headers: {

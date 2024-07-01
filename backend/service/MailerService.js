@@ -30,7 +30,7 @@ MailerService.sendMail = async (to, subject, text, html) => {
     try {
         console.log('Sending email to:', to)
         const mailResponse = await transporter.sendMail(mailOptions)
-        console.log('Sendind mail response:', mailResponse)
+        console.log('Sending mail response:', mailResponse)
     }   catch (error) {
         console.log('Error sending email:', error)
     }
