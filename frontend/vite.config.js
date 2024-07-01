@@ -8,8 +8,5 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:5000',
     },
-  },
-  env: {
-    VITE_API_URL: process.env.VITE_API_URL,
   }
 })
