@@ -27,7 +27,7 @@ UserService.save = async function (user) {
         const html = '<h1>Welcome to Mushin Dojo</h1>' +
             '<p>' +
             'Thank you for signing up, please verify your registration by clicking on this link: ' +
-            '<a href="' + domain + '/validation?mail=' + user.email + '">Dojo</a>' +
+            '<a href="' + domain + '/virtual-dojo/frontend/validation?mail=' + user.email + '">Dojo</a>' +
             '</p>';
 
         try {
