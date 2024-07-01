@@ -2,7 +2,6 @@ import {Button} from 'primereact/button'
 import {Dialog} from 'primereact/dialog'
 import {InputText} from "primereact/inputtext"
 import {useState} from "react"
-import background from "/Shotokan_Fondo.svg"
 import {Calendar} from "primereact/calendar"
 import {useNavigate} from "react-router-dom";
 import {getApplicationDomain} from "../../../utils/session";
@@ -61,10 +60,12 @@ export default function Register() {
 
     function doRegister() {
         if (validateForm()) {
+            const login = btoa(import.meta.env.VITE_SERVICE_USR + ':' + import.meta.env.VITE_SERVICE_PASS)
             fetch(domain + '/api/users/register', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Basic ${login}`
                 },
                 body: JSON.stringify({user, date, password})
             })
@@ -84,8 +85,7 @@ export default function Register() {
     }
 
     return (
-        <div className="card flex justify-content-center"
-             style={{backgroundImage: `url(${background})`, backgroundSize: 'cover', height: '100vh'}}>
+        <div className="card flex justify-content-center background-image">
             <Dialog
                 visible={visible}
                 modal

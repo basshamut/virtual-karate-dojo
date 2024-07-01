@@ -10,10 +10,12 @@ export default function Validation() {
 
     useEffect(() => {
         const domain = getApplicationDomain()
+        const login = btoa(import.meta.env.VITE_SERVICE_USR + ':' + import.meta.env.VITE_SERVICE_PASS)
         fetch(`${domain}/api/users/validate`, {
             method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${login}`
             },
             body: JSON.stringify({ userMail: mail }),
         })

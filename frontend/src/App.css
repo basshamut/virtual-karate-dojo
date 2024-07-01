@@ -52,3 +52,12 @@ body, html {
 .read-the-docs {
   color: #888;
 }
+
+.background-image {
+  background-image: url('../public/Shotokan_Fondo.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+  width: 100%;
+}

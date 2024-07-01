@@ -33,7 +33,7 @@ export default function Dashboard() {
     }, [navigate])
 
     return (
-        <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', height: '100vh' }}>
+        <div>
             <Menubar model={menuItems} start={start} end={end}/>
             <PrincipalCardContainer/>
             <div>

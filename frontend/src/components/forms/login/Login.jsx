@@ -4,7 +4,6 @@ import {InputText} from "primereact/inputtext"
 import {useState} from "react"
 import {useNavigate} from "react-router-dom"
 import {getApplicationDomain, startSession} from "../../../utils/session.jsx"
-import background from "/Shotokan_Fondo.svg"
 
 
 export default function Login() {
@@ -20,12 +19,14 @@ export default function Login() {
 
     function doLogin() {
         if (validateEmail(user)) {
+            const login = btoa(import.meta.env.VITE_SERVICE_USR + ':' + import.meta.env.VITE_SERVICE_PASS)
             const domain = getApplicationDomain()
             console.log("Domain: " + domain)
             fetch(domain + '/api/users/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Basic ${login}`
                 },
                 body: JSON.stringify({
                     user: user,
@@ -57,8 +58,7 @@ export default function Login() {
     }
 
     return (
-        <div className="card flex justify-content-center"
-             style={{backgroundImage: `url(${background})`, backgroundSize: 'cover', height: '100vh'}}>
+        <div className="card flex justify-content-center background-image">
             <Dialog
                 visible={visible}
                 modal
