@@ -21,31 +21,6 @@ jobs:
         with:
           node-version: '22'  # O la versión que uses
 
-      # Crear el archivo .env para el frontend
-      - name: Create frontend .env file
-        run: |
-          # Crear directorios en el VPS
-          sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/frontend /var/www/html/virtual-dojo/backend'
-
-          # Crear el archivo .env para el frontend
-          sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<EOF
-            echo "VITE_API_URL=${VITE_API_URL}" > /var/www/html/virtual-dojo/frontend/.env
-            echo "VITE_SERVICE_USR=${VITE_SERVICE_USR}" > /var/www/html/virtual-dojo/frontend/.env
-            echo "VITE_SERVICE_PASS=${VITE_SERVICE_PASS}" > /var/www/html/virtual-dojo/frontend/.env
-          EOF
-
-          # Crear el archivo .env para el backend
-          sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<EOF
-            echo "PORT=${PORT}" > /var/www/html/virtual-dojo/backend/.env
-            echo "DATA_BASE_URL=${DATA_BASE_URL}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "FRONTEND_URL=${FRONTEND_URL}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "EMAIL_HOST=${EMAIL_HOST}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "EMAIL_USER=${EMAIL_USER}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "EMAIL_PASS=${EMAIL_PASS}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "API_DOMAIN=${API_DOMAIN}" >> /var/www/html/virtual-dojo/backend/.env
-          EOF          
-
       - name: Install dependencies for frontend
         run: |
           npm run install:frontend 
@@ -80,12 +55,34 @@ jobs:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
         run: |
+          # Crear directorios en el VPS
+          sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/frontend /var/www/html/virtual-dojo/backend'
+
           # Copiar el build del frontend al VPS
           rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no" frontend/dist/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/frontend"
 
+          # Crear el archivo .env para el frontend
+          sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<EOF
+            echo "VITE_API_URL=${VITE_API_URL}" >> /var/www/html/virtual-dojo/frontend/.env
+            echo "VITE_SERVICE_USR=${VITE_SERVICE_USR}" >> /var/www/html/virtual-dojo/frontend/.env
+            echo "VITE_SERVICE_PASS=${VITE_SERVICE_PASS}" >> /var/www/html/virtual-dojo/frontend/.env
+          EOF
+
           # Copiar el backend al VPS
           rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no" backend/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/backend"
-        
+
+          # Crear el archivo .env para el backend
+          sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<EOF
+            echo "PORT=${PORT}" > /var/www/html/virtual-dojo/backend/.env
+            echo "DATA_BASE_URL=${DATA_BASE_URL}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "FRONTEND_URL=${FRONTEND_URL}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "EMAIL_HOST=${EMAIL_HOST}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "EMAIL_USER=${EMAIL_USER}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "EMAIL_PASS=${EMAIL_PASS}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "API_DOMAIN=${API_DOMAIN}" >> /var/www/html/virtual-dojo/backend/.env
+          EOF          
+          
           # Conectar al VPS y reiniciar el backend
           sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" << 'EOF'
             cd /var/www/html/virtual-dojo/backend
