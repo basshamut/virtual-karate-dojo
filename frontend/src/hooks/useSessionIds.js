@@ -1,11 +1,11 @@
 import {useCallback} from 'react';
 import {getApplicationDomain, getBase64CredentialsFromSession, getSession} from "../utils/session.jsx";
 
-const domain = getApplicationDomain();
-const base64Credentials = getBase64CredentialsFromSession();
-const user = getSession();
 
 const useSessionIds = () => {
+    const domain = getApplicationDomain();
+    const base64Credentials = getBase64CredentialsFromSession();
+    const user = getSession();
     return useCallback((meet) => {
         return fetch(domain + "/api/stripe/create-checkout-session", {
             method: "POST",
