@@ -1,38 +1,38 @@
 import { useLocation } from 'react-router-dom'
-import { useEffect, useState } from "react"
-import {getApplicationDomain} from "../../utils/session"
+import { useState } from "react"
+import { Dialog } from 'primereact/dialog'
+import { Button } from 'primereact/button'
+import { useValidation } from '../../hooks/useValidation'
+import { useCountdown } from '../../hooks/useCountdown'
 
 export default function Validation() {
     const location = useLocation()
     const params = new URLSearchParams(location.search)
     const mail = params.get('mail')
-    const [state, setState] = useState("")
+    const { state, errorMessage } = useValidation(mail)
+    const countdown = useCountdown(30, state === 'succeeded')
 
-    useEffect(() => {
-        const domain = getApplicationDomain()
-        const login = btoa(import.meta.env.VITE_SERVICE_USR + ':' + import.meta.env.VITE_SERVICE_PASS)
-        fetch(`${domain}/api/users/validate`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Basic ${login}`
-            },
-            body: JSON.stringify({ userMail: mail }),
-        })
-            .then(response => response.json())
-            .then(() => {
-                setState('succeeded')
-            })
-            .catch(() => {
-                setState('canceled')
-            })
-    }, [mail])
+    function closeDialog() {
+        setState('')
+    }
 
     return (
         <div>
-            {state === 'succeeded' && <p>Validación exitosa.</p>}
-            {state === 'canceled' && <p>Este usuario no ha podido ser verificado.</p>}
-            {!state && <p>Estado desconocido</p>}
+            <Dialog
+                header="Estado de Validación"
+                visible={state !== ''}
+                modal
+                onHide={() => closeDialog()}
+                footer={
+                    <div>
+                        <Button label="Aceptar" onClick={() => closeDialog()} autoFocus />
+                    </div>
+                }
+            >
+                {state === 'succeeded' && <p>Validación exitosa. Redirigiendo al login en {countdown} segundos...</p>}
+                {state === 'canceled' && <p>{errorMessage}</p>}
+                {!state && <p>Estado desconocido</p>}
+            </Dialog>
         </div>
     )
 }
