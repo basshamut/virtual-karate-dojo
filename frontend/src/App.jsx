@@ -10,6 +10,7 @@ import 'primeicons/primeicons.css'
 import Login from "./components/forms/login/Login.jsx"
 import Register from "./components/forms/register/Register.jsx"
 import Validation from "./pages/validation/Validation";
+import EmailVerification from "./pages/validation/EmailVerification";
 
 function InnerApp() {
     const navigate = useNavigate()
@@ -32,6 +33,7 @@ function InnerApp() {
                 <Route path="/virtual-dojo/frontend/register" element={<Register/>}/>
                 <Route path="/virtual-dojo/frontend/validation" element={<Validation/>}/>
                 <Route path="/virtual-dojo/frontend/dashboard" element={<Dashboard/>}/>
+                <Route path="/virtual-dojo/frontend/email-verification" element={<EmailVerification/>}/>
                 <Route path="/virtual-dojo/frontend" element={<Login/>}/>
             </Routes>
         </>

@@ -3,8 +3,8 @@ import {Dialog} from 'primereact/dialog'
 import {InputText} from "primereact/inputtext"
 import {useState} from "react"
 import {Calendar} from "primereact/calendar"
-import {useNavigate} from "react-router-dom";
-import {getApplicationDomain} from "../../../utils/session";
+import {useNavigate} from "react-router-dom"
+import {getApplicationDomain} from "../../../utils/session"
 
 export default function Register() {
     const [visible, setVisible] = useState(true)
@@ -76,7 +76,7 @@ export default function Register() {
                 })
                 .then(() => {
                     setVisible(false)
-                    navigate("/virtual-dojo/frontend/login")
+                    navigate("/virtual-dojo/frontend/email-verification")
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error)

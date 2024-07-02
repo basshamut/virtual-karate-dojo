@@ -4,13 +4,14 @@ import {InputText} from "primereact/inputtext"
 import {useState} from "react"
 import {useNavigate} from "react-router-dom"
 import {getApplicationDomain, startSession} from "../../../utils/session.jsx"
-
+import {Message} from 'primereact/message'
 
 export default function Login() {
     const [visible, setVisible] = useState(true)
     const navigate = useNavigate()
     const [user, setUser] = useState("")
     const [password, setPassword] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
 
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -45,9 +46,10 @@ export default function Login() {
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error)
+                    setErrorMessage("Correo o contraseña incorrectos")
                 })
         } else {
-            alert("El email no es válido")
+            setErrorMessage("El email no es válido")
         }
     }
 
@@ -83,6 +85,9 @@ export default function Login() {
                                        className="bg-white-alpha-20 border-none p-3 text-primary-50" type="password"
                                        value={password} onChange={(e) => setPassword(e.target.value)}></InputText>
                         </div>
+                        {errorMessage && (
+                            <Message severity="error" text={errorMessage} />
+                        )}
                         <div className="flex align-items-center gap-2">
                             <Button label="Entrar" onClick={() => doLogin()} text
                                     className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"></Button>
