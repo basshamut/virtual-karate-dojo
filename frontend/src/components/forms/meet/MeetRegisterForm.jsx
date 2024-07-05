@@ -100,7 +100,9 @@ export default function MeetRegisterForm() {
             </div>
             <div className="inline-flex flex-column gap-2" style={{ marginBottom: '15px' }}>
                 <Label htmlFor="meetDate">Fecha de la Reunión</Label>
-                <Calendar id="meetDate" value={date} onChange={(e) => setDate(e.value)} dateFormat="dd/mm/yy"
+                <Calendar id="meetDate"
+                          value={date} onChange={(e) => setDate(e.value)}
+                          dateFormat="dd/mm/yy"
                           minDate={today} showTime hourFormat="24" style={{ width: '100%' }}
                 />
             </div>

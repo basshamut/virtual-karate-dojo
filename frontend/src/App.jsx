@@ -53,4 +53,5 @@ export default function App() {
 * -. Agregar job para limpieza de clases pasadas
 * -. Dar estilo a la factura de compra
 * -. Agregar soporte de idiomas
+* -. Ajustar vista desde el celular
  */

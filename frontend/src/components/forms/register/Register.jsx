@@ -6,9 +6,12 @@ import {Calendar} from "primereact/calendar"
 import {useNavigate} from "react-router-dom"
 import {getApplicationDomain} from "../../../utils/session"
 
+
 export default function Register() {
+    const today = new Date();
+    const majorityAgeDate = new Date(today.getFullYear() - 18, 0, 1)
     const [visible, setVisible] = useState(true)
-    const [date, setDate] = useState()
+    const [date, setDate] = useState(majorityAgeDate)
     const [user, setUser] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
@@ -16,8 +19,6 @@ export default function Register() {
     const navigate = useNavigate()
     const domain = getApplicationDomain()
 
-    const today = new Date()
-    const majorityAgeDate = new Date(today.getFullYear() - 18, 0, 1)
 
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -108,7 +109,9 @@ export default function Register() {
                             <label htmlFor="meetDate" className="text-primary-50 font-semibold">
                                 Fecha de Nacimiento
                             </label>
-                            <Calendar value={majorityAgeDate} onChange={(e) => setDate(e.value)} dateFormat="dd/mm/yy"
+                            <Calendar id="majorityAgeDate"
+                                      value={majorityAgeDate} onChange={(e) => setDate(e.value)}
+                                      dateFormat="dd/mm/yy"
                                       maxDate={majorityAgeDate}/>
                             {errors.date && <small className="p-error">{errors.date}</small>}
                         </div>
