@@ -27,7 +27,8 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3",
     "uuid": "^9.0.0",
-    "pdf-lib": "^1.17.1"
+    "pdf-lib": "^1.17.1",
+    "date-fns": "^2.16.1"
   },
   "devDependencies": {
     "eslint": "^9.5.0",
