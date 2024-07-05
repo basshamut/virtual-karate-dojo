@@ -12,5 +12,8 @@
   },
   "devDependencies": {
     "concurrently": "^6.0.0"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
   }
 }

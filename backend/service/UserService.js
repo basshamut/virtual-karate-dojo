@@ -103,13 +103,11 @@ UserService.validate = async function (email) {
 }
 
 UserService.findByEmail = async function(userMail) {
-    const user = await userRepository.findOne({
+    return await userRepository.findOne({
         where: {
             email: userMail
         }
-    });
-
-    return user
+    })
 }
 
 

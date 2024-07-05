@@ -47,3 +47,10 @@ export default function App() {
         </Router>
     )
 }
+
+/*TODO
+* -. Agregar job para envio de mails con link de conexion 1hr antes de la clase
+* -. Agregar job para limpieza de clases pasadas
+* -. Dar estilo a la factura de compra
+* -. Agregar soporte de idiomas
+ */

@@ -18,13 +18,20 @@ const transporter = nodemailer.createTransport({
     socketTimeout: 60000
 })
 
-MailerService.sendMail = async (to, subject, text, html) => {
+MailerService.sendMail = async (to, subject, text, html, adj) => {
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to: to,
         subject: subject,
         text: text,
-        html: html
+        html: html,
+        attachments: adj ? [
+            {
+                filename: 'invoice.pdf',
+                content: adj,
+                encoding: 'base64'
+            }
+        ] : []
     }
 
     try {
