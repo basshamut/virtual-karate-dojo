@@ -1,6 +1,6 @@
 {
   "name": "virtual-karate-dojo",
-  "version": "1.0.0",
+  "version": "1.0.0-SNAPSHOT",
   "private": true,
   "scripts": {
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
@@ -12,8 +12,5 @@
   },
   "devDependencies": {
     "concurrently": "^6.0.0"
-  },
-  "dependencies": {
-    "pdf-lib": "^1.17.1"
   }
 }
