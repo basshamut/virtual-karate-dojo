@@ -85,6 +85,12 @@ export default function Register() {
         }
     }
 
+    function pushDate(e) {
+        console.log(e)
+        console.log(e.value)
+        setDate(e.value)
+    }
+
     return (
         <div className="card flex justify-content-center background-image">
             <Dialog
@@ -110,7 +116,7 @@ export default function Register() {
                                 Fecha de Nacimiento
                             </label>
                             <Calendar id="majorityAgeDate"
-                                      value={majorityAgeDate} onChange={(e) => setDate(e.value)}
+                                      value={date} onChange={(e) => pushDate(e)}
                                       dateFormat="dd/mm/yy"
                                       maxDate={majorityAgeDate}/>
                             {errors.date && <small className="p-error">{errors.date}</small>}

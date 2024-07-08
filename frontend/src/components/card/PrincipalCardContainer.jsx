@@ -8,6 +8,7 @@ import {DataScroller} from "primereact/datascroller";
 import { Divider } from 'primereact/divider';
 import {format} from "date-fns";
 import {loadStripe} from "@stripe/stripe-js";
+import './PrincipalCardContainer.css'; // Importa el archivo CSS
 
 export default function PrincipalCardContainer() {
     const userSession = hasSession();
@@ -38,24 +39,23 @@ export default function PrincipalCardContainer() {
 
     const itemTemplate = (meet) => {
         return (
-            <div className="col-12">
+            <div className="col-12 meet-item">
                 <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
-                    <img className="w-9 sm:w-4rem xl:w-rem shadow-2 block xl:block mx-auto border-round"
+                    <img className="w-9 sm:w-4rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
                          src={'./Shotokan_Logo.svg'} alt={meet.name}/>
-                    <div
-                        className="flex flex-column lg:flex-row justify-content-between align-items-center xl:align-items-start lg:flex-1 gap-4">
+                    <div className="flex flex-column lg:flex-row justify-content-between align-items-center xl:align-items-start lg:flex-1 gap-4">
                         <div className="flex flex-column align-items-center lg:align-items-start gap-3">
                             <div className="flex flex-column gap-1">
                                 <div className="text-2xl font-bold text-900">Clase de Karate Budo</div>
+                                <div className="text-2xl font-bold text-900">
+                                    <span className="text-2xl font-semibold">${meet.price}</span>
+                                </div>
                                 <div className="text-900">Fecha: {format(meet.meetDate, 'dd/MM/yyyy HH:mm')}</div>
                             </div>
                         </div>
-                        <div
-                            className="flex flex-row lg:flex-column align-items-center lg:align-items-end gap-4 lg:gap-2">
-                            <span className="text-2xl font-semibold">${meet.price}</span>
+                        <div className="flex flex-row lg:flex-column align-items-center lg:align-items-end gap-4 lg:gap-2">
                             <Button icon="pi pi-shopping-cart" label="Comprar"
                                     onClick={() => handleCheckout(meet)}></Button>
-                            <Tag value={'Activo'} severity={'success'}></Tag>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@ export default function PrincipalCardContainer() {
     };
 
     return (
-        <div className="card">
+        <div className="card principal-card-container">
             {isUserValue &&
                 <div className="card">
                     <DataScroller value={meets} itemTemplate={itemTemplate} rows={50} buffer={0.2} header="Clases Programadas"/>

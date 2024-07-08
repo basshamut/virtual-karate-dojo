@@ -1,0 +1,21 @@
+/* PrincipalCardContainer.css */
+
+.principal-card-container {
+    padding: 1rem;
+}
+
+.meet-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.meet-item .flex {
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .meet-item .flex {
+        flex-direction: row;
+    }
+}
