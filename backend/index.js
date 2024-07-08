@@ -4,7 +4,7 @@ const cors = require('cors');
 const setupSwagger = require('./config/swagger/swagger');
 
 const app = express();
-
+require('./schedule/MeetSchedule');
 const meetController = require('./controller/MeetController');
 const stripeController = require('./controller/StripeController');
 const userController = require('./controller/UserController');

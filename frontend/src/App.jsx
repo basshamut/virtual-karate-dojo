@@ -49,8 +49,6 @@ export default function App() {
 }
 
 /*TODO
-* -. Ajustar vista desde el celular
-* -. Agregar job para limpieza de clases pasadas
 * -. Agregar job para envio de mails con link de conexion 1hr antes de la clase
 * -. Dar estilo a la factura de compra
 * -. Agregar soporte de idiomas
