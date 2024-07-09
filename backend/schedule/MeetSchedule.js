@@ -63,11 +63,11 @@ MeetSchedule.sendMeets = cron.schedule('0 * * * *', async () => {
             }
 
             //Eliminamos los meets ya enviados
-            // await meetRepository.destroy({
-            //     where: {
-            //         id: meet.id
-            //     }
-            // })
+            await meetRepository.destroy({
+                where: {
+                    id: meet.id
+                }
+            })
         }
 
     } catch (err) {

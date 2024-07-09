@@ -48,7 +48,7 @@ export default function PrincipalCardContainer() {
                             <div className="flex flex-column gap-1">
                                 <div className="text-2xl font-bold text-900">Clase de Karate Budo</div>
                                 <div className="text-2xl font-bold text-900">
-                                    <span className="text-2xl font-semibold">${meet.price}</span>
+                                    <span className="text-2xl font-semibold">{meet.price}€</span>
                                 </div>
                                 <div className="text-900">Fecha: {format(meet.meetDate, 'dd/MM/yyyy HH:mm')}</div>
                             </div>
