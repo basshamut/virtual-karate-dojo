@@ -49,7 +49,6 @@ export default function App() {
 }
 
 /*TODO
-* -. Agregar job para envio de mails con link de conexion 1hr antes de la clase
 * -. Dar estilo a la factura de compra
 * -. Agregar soporte de idiomas
  */

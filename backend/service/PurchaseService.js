@@ -16,8 +16,6 @@ PurchaseService.save = async function (purchase) {
         purchaseDate: new Date()
     })
 
-    console.log(`Purchase created: ${JSON.stringify(newPurchase)}`)
-
     const dataForPdf = {
         id: newPurchase.id,
         purchaseDate: format(newPurchase.purchaseDate, 'dd/MM/yyyy HH:mm'),
@@ -26,8 +24,6 @@ PurchaseService.save = async function (purchase) {
             {product: "Clase de Karate", quantity: 1, cost: meet.price}
         ]
     }
-
-    console.log(`Data for pdf: ${JSON.stringify(dataForPdf)}`)
 
     const invoicePdf = await invoiceMakerService.generateInvoicePdf(dataForPdf)
     await mailerService.sendMail(

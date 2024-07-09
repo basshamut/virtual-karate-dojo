@@ -1,8 +1,12 @@
-const cron = require('node-cron');
-const { Op } = require('sequelize');
-const meetRepository = require('../persistance/MeetRepository');
+const cron = require('node-cron')
+const {Op} = require('sequelize')
+const moment = require('moment-timezone');
+const meetRepository = require('../persistance/MeetRepository')
+const purchaseRepository = require('../persistance/PurchaseRepository')
+const userRepository = require('../persistance/UserRepository')
+const mailerService = require('../service/MailerService')
 
-const MeetSchedule = {};
+const MeetSchedule = {}
 
 MeetSchedule.deleteOldMeets = cron.schedule('0 0 * * *', async () => {
     try {
@@ -12,15 +16,54 @@ MeetSchedule.deleteOldMeets = cron.schedule('0 0 * * *', async () => {
                     [Op.lt]: new Date()
                 }
             }
+        })
+
+        console.log(`Se eliminaron ${result} registros.`)
+    } catch (err) {
+        console.error('Error al eliminar registros:', err)
+    }
+})
+
+MeetSchedule.sendMeets = cron.schedule('0 * * * *', async () => {
+    try {
+        const now = moment().tz('GMT');
+        const todayMidnight = now.clone().startOf('day').set({ second: 0, millisecond: 0 });
+        const oneHourAgo = now.clone().add(1, 'hours').set({ second: 0, millisecond: 0 });
+
+        const meets = await meetRepository.findAll({
+            where: {
+                meetDate: {
+                    [Op.gte]: todayMidnight.toDate(),
+                    [Op.lte]: oneHourAgo.toDate()
+                }
+            }
         });
 
-        console.log(`Se eliminaron ${result} registros.`); // result es el número de registros eliminados
+        for (const meet of meets) {
+            const purchases = await purchaseRepository.findAll({
+                where: {
+                    meetId: meet.id
+                },
+                include: [userRepository]
+            });
+
+            for (const purchase of purchases) {
+                const user = purchase.User;
+                await mailerService.sendMail(
+                    user.email,
+                    'Link: Clase Karate Budo Online',
+                    'Link para la clase de Karate Budo Online: ' + meet.meetUrl,
+                    'Link para la clase de Karate Budo Online: ' + meet.meetUrl,
+                    null
+                );
+
+                console.log(`Notificación enviada a: ${user.email}`);
+            }
+        }
+
     } catch (err) {
-        console.error('Error al eliminar registros:', err);
+        console.error('Error al buscar registros:', err);
     }
 });
-
-// Iniciar el schedule inmediatamente al importar el módulo
-MeetSchedule.deleteOldMeets.start();
 
 module.exports = MeetSchedule;

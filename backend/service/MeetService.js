@@ -1,15 +1,17 @@
+const moment = require('moment-timezone');
 const meetRepository = require('../persistance/MeetRepository')
 
 const MeetService = {}
 
-MeetService.save = async function (meet){
+MeetService.save = async function (meet) {
+    const meetDate = moment.tz(meet.meetDate, 'GMT').set({ second: 0, millisecond: 0 }).toDate()
+
     return await meetRepository.create({
         meetUrl: meet.meetUrl,
-        meetDate: new Date( Date.parse(meet.meetDate)),
+        meetDate: meetDate,
         price: meet.price
-    })
+    });
 }
-
 MeetService.getAll = async function (){
     return await meetRepository.findAll();
 }
