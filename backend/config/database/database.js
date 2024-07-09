@@ -1,4 +1,4 @@
-const {Sequelize} = require('sequelize');
+const {Sequelize} = require('sequelize')
 
 // const connection = 'postgresql://test_db_owner:Lqn84hbsNPvG@ep-purple-voice-a5bgc10s.us-east-2.aws.neon.tech/test_db?sslmode=require'
 const connection = process.env.DATA_BASE_URL
@@ -11,7 +11,7 @@ const sequelize = new Sequelize(connection, {
             rejectUnauthorized: false
         }
     }
-});
+})
 
 // Synchronize all models
 try {
@@ -28,4 +28,4 @@ try {
     console.error('Unable to connect to the database:', error)
 }
 
-module.exports = sequelize;
+module.exports = sequelize

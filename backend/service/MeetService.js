@@ -1,4 +1,4 @@
-const moment = require('moment-timezone');
+const moment = require('moment-timezone')
 const meetRepository = require('../persistance/MeetRepository')
 
 const MeetService = {}
@@ -10,14 +10,14 @@ MeetService.save = async function (meet) {
         meetUrl: meet.meetUrl,
         meetDate: meetDate,
         price: meet.price
-    });
+    })
 }
 MeetService.getAll = async function (){
-    return await meetRepository.findAll();
+    return await meetRepository.findAll()
 }
 
 MeetService.getOne = async function (id){
-    return await meetRepository.findByPk(id);
+    return await meetRepository.findByPk(id)
 }
 
 MeetService.update = async function (id, meet){
@@ -25,9 +25,9 @@ MeetService.update = async function (id, meet){
         where: {
             id: id
         }
-    });
+    })
 
-    return await meetRepository.findByPk(id);
+    return await meetRepository.findByPk(id)
 }
 
 MeetService.delete = async function (id){
@@ -35,7 +35,7 @@ MeetService.delete = async function (id){
         where: {
             id: id
         }
-    });
+    })
 }
 
 MeetService.getByUrl = async function (url){
@@ -43,7 +43,7 @@ MeetService.getByUrl = async function (url){
         where: {
             meetUrl: url
         }
-    });
+    })
 }
 
 module.exports = MeetService
