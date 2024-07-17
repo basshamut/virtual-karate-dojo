@@ -13,7 +13,7 @@ body, html {
   padding: 0;
   height: 100%;
   width: 100%;
-  background-image: url('../public/Shotokan_Fondo.svg');
+  background-image: url('/Shotokan_Fondo.svg');
   background-size: cover; /* O puedes usar `contain` dependiendo de tus necesidades */
   background-repeat: no-repeat; /* Evita que la imagen se repita */
   background-attachment: fixed; /* Hace que la imagen de fondo permanezca fija al desplazarse */
