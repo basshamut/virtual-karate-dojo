@@ -74,8 +74,8 @@ router.post('/create-checkout-session', async (req, res) => {
                 },
             ],
             mode: 'payment',
-            success_url: `${domain}/virtual-dojo/frontend/dashboard?state=succeeded&meetId=${meetId}&userId=${userId}`,
-            cancel_url: `${domain}/virtual-dojo/frontend/dashboard?state=canceled&meetId=${meetId}&userId=${userId}`,
+            success_url: `${domain}/dojo/dashboard?state=succeeded&meetId=${meetId}&userId=${userId}`,
+            cancel_url: `${domain}/dojo/dashboard?state=canceled&meetId=${meetId}&userId=${userId}`,
         });
 
         res.json({ sessionId: session.id });

@@ -77,7 +77,7 @@ export default function Register() {
                 })
                 .then(() => {
                     setVisible(false)
-                    navigate("/virtual-dojo/frontend/email-verification")
+                    navigate("/dojo/email-verification")
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error)

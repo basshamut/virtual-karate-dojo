@@ -23,7 +23,7 @@ export default function Validation() {
                 footer={
                     <div>
                         <Button label="Aceptar" icon="pi pi-check" onClick={() => {
-                            window.location.href = '/virtual-dojo/frontend/login'
+                            window.location.href = '/dojo/login'
                         }}/>
                     </div>
                 }>

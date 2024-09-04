@@ -9,7 +9,7 @@ export const useMenuItems = () => {
             label: 'Inicio',
             icon: 'pi pi-home',
             command: () => {
-                navigate('/virtual-dojo/frontend/dashboard')
+                navigate('/dojo/dashboard')
             }
         }
         //TODO que opciones de menu se podrian agregar?
@@ -18,7 +18,7 @@ export const useMenuItems = () => {
         //     label: 'Productos',
         //     icon: 'pi pi-shopping-cart',
         //     command: () => {
-        //         navigate('/virtual-dojo/frontend/dashboard')
+        //         navigate('/dojo/dashboard')
         //     }
         // }
     ];
@@ -29,7 +29,7 @@ export const useEnd = () => {
     const navigate = useNavigate();
     const closeSession = () => {
         clearSession()
-        navigate("/virtual-dojo/frontend")
+        navigate("/dojo")
     }
 
     return (
