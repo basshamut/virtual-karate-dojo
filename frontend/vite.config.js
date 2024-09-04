@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default defineConfig({
-  base: '/virtual-dojo/frontend/',
+  base: '/dojo',
   plugins: [react()],
   define: {
     'process.env': process.env
