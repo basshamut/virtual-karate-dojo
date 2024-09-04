@@ -21,7 +21,7 @@ function InnerApp() {
             if (!sessionUser) {
                 navigate('/dojo/login')
             }
-        },  SESSION_DURATION) // Verifica cada 1 minuto
+        }, SESSION_DURATION) // Verifica cada 1 minuto
         return () => clearInterval(interval)
     }, [])
 
@@ -40,10 +40,11 @@ function InnerApp() {
     )
 
 }
+
 export default function App() {
     return (
         <Router>
-            <InnerApp />
+            <InnerApp/>
         </Router>
     )
 }
