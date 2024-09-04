@@ -62,7 +62,7 @@ export default function Register() {
     function doRegister() {
         if (validateForm()) {
             const login = btoa(import.meta.env.VITE_SERVICE_USR + ':' + import.meta.env.VITE_SERVICE_PASS)
-            fetch(domain + '/api/users/register', {
+            fetch(domain + '/users/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

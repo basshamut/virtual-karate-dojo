@@ -61,7 +61,7 @@ export default function MeetRegisterForm() {
     const base64Credentials = getBase64CredentialsFromSession()
 
     function saveMeet() {
-        fetch(domain + '/api/meets', {
+        fetch(domain + '/meets', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

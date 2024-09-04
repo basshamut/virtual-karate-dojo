@@ -10,7 +10,7 @@ function useSavePurchase(isSuccess, meetId, userId) {
     useEffect(() => {
         async function savePurchase() {
             try {
-                const response = await fetch(domain + '/api/purchases', {
+                const response = await fetch(domain + '/purchases', {
 
                     method: 'POST',
                     headers: {

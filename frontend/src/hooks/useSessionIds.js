@@ -7,7 +7,7 @@ const useSessionIds = () => {
     const base64Credentials = getBase64CredentialsFromSession();
     const user = getSession();
     return useCallback((meet) => {
-        return fetch(domain + "/api/stripe/create-checkout-session", {
+        return fetch(domain + "/stripe/create-checkout-session", {
             method: "POST",
             body: JSON.stringify({
                 meetId: meet.id,
