@@ -1,16 +1,16 @@
 import {useEffect, useState} from 'react';
 import {getApplicationDomain, getBase64CredentialsFromSession} from "../utils/session";
 
-function useFetchMeets(isUser, hasSession) {
-    const [meets, setMeets] = useState([]);
+function useGetPurchases(isUser, hasSession) {
+    const [purchases, setPurchases] = useState([]);
     const [error, setError] = useState(null);
     const base64Credentials = getBase64CredentialsFromSession()
 
     useEffect(() => {
-        async function fetchMeets() {
+        async function getPurchases() {
             try {
                 const domain = getApplicationDomain()
-                const response = await fetch(domain + '/meets/all', {
+                const response = await fetch(domain + '/purchases', {
                     headers: {
                         'Authorization': `Basic ${base64Credentials}`
                     }
@@ -21,20 +21,24 @@ function useFetchMeets(isUser, hasSession) {
                     setError(error);
                 }
 
-                const meets = await response.json();
-                setMeets(meets || []);
+                const purchaseList = await response.json();
+
+                console.log("Lista -> " + purchaseList)
+
+                setPurchases(purchaseList || []);
             } catch (error) {
                 console.error('Error fetching meets:', error);
                 setError(error);
             }
+            setPurchases(purchases)
         }
 
         if (hasSession && isUser) {
-            fetchMeets();
+            getPurchases()
         }
-    }, [isUser, hasSession, base64Credentials, error]);
+    }, [isUser, hasSession, purchases, base64Credentials, error]);
 
-    return {meets, error};
+    return {purchases, error};
 }
 
-export default useFetchMeets;
+export default useGetPurchases;

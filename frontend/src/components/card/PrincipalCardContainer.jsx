@@ -3,12 +3,12 @@ import {hasSession, isAdmin, isUser} from "../../utils/session.jsx";
 import useFetchMeets from '../../hooks/useFetchMeets.js';
 import useSessionIds from '../../hooks/useSessionIds.js';
 import {Button} from 'primereact/button';
-import {Tag} from 'primereact/tag';
 import {DataScroller} from "primereact/datascroller";
-import { Divider } from 'primereact/divider';
+import {Divider} from 'primereact/divider';
 import {format} from "date-fns";
 import {loadStripe} from "@stripe/stripe-js";
-import './PrincipalCardContainer.css'; // Importa el archivo CSS
+import './PrincipalCardContainer.css';
+import PurchasesTable from "../table/PurchasesTable";
 
 export default function PrincipalCardContainer() {
     const userSession = hasSession();
@@ -43,7 +43,8 @@ export default function PrincipalCardContainer() {
                 <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
                     <img className="w-9 sm:w-4rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
                          src={'./Shotokan_Logo.svg'} alt={meet.name}/>
-                    <div className="flex flex-column lg:flex-row justify-content-between align-items-center xl:align-items-start lg:flex-1 gap-4">
+                    <div
+                        className="flex flex-column lg:flex-row justify-content-between align-items-center xl:align-items-start lg:flex-1 gap-4">
                         <div className="flex flex-column align-items-center lg:align-items-start gap-3">
                             <div className="flex flex-column gap-1">
                                 <div className="text-2xl font-bold text-900">Clase de Karate Budo</div>
@@ -53,13 +54,14 @@ export default function PrincipalCardContainer() {
                                 <div className="text-900">Fecha: {format(meet.meetDate, 'dd/MM/yyyy HH:mm')}</div>
                             </div>
                         </div>
-                        <div className="flex flex-row lg:flex-column align-items-center lg:align-items-end gap-4 lg:gap-2">
+                        <div
+                            className="flex flex-row lg:flex-column align-items-center lg:align-items-end gap-4 lg:gap-2">
                             <Button icon="pi pi-shopping-cart" label="Comprar"
                                     onClick={() => handleCheckout(meet)}></Button>
                         </div>
                     </div>
                 </div>
-                <Divider />
+                <Divider/>
             </div>
         );
     };
@@ -68,13 +70,17 @@ export default function PrincipalCardContainer() {
         <div className="card principal-card-container">
             {isUserValue &&
                 <div className="card">
-                    <DataScroller value={meets} itemTemplate={itemTemplate} rows={50} buffer={0.2} header="Clases Programadas"/>
+                    <DataScroller value={meets} itemTemplate={itemTemplate} rows={50} buffer={0.2}
+                                  header="Clases Programadas"/>
                 </div>
             }
             {isAdminValue && (
-                <div className="dashboard-container" style={{textAlign: 'center'}}>
-                    <div className="dashboard-section">
+                <div className="dashboard-container flex">
+                    <div className="dashboard-section" style={{flex: 1, marginRight: '1rem'}}>
                         <MeetRegisterForm/>
+                    </div>
+                    <div className="dashboard-section" style={{flex: 2}}>
+                        <PurchasesTable/>
                     </div>
                 </div>
             )}

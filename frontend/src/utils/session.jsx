@@ -1,5 +1,5 @@
 // export const SESSION_DURATION = 60 * 1000 // 1 minuto
-export const SESSION_DURATION = 30 * 60 * 1000 // 30 minutos
+export const SESSION_DURATION = 120 * 60 * 1000 // 120 minutos
 const SESSION_KEY = 'user_session'
 
 export const startSession = (userData) => {

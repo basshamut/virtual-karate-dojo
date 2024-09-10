@@ -78,6 +78,7 @@ export default function MeetRegisterForm() {
             .then(() => {
                 setUrl('');
                 setDate(today);
+                setPrice(0);
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
