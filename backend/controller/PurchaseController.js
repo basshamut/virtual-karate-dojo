@@ -31,9 +31,35 @@ const PurchaseService = require("../service/PurchaseService");
  *   /api/purchases/:
  *     get:
  *       summary: Get list of purchases
- *       description: Retrieve a list of all purchases with details such as email, birth date, purchase date, meet date, and price.
- *       tags:
- *         - Purchases
+ *       description: Retrieve a list of all purchases with optional filters by date.
+ *       tags: [Purchases]
+ *       parameters:
+ *         - in: query
+ *           name: page
+ *           schema:
+ *             type: int32
+ *           required: false
+ *           description: Page number
+ *         - in: query
+ *           name: limit
+ *           schema:
+ *             type: int32
+ *           required: false
+ *           description: Limit
+ *         - in: query
+ *           name: startDate
+ *           schema:
+ *             type: string
+ *             format: date
+ *           required: false
+ *           description: Filter purchases from this start date (inclusive).
+ *         - in: query
+ *           name: endDate
+ *           schema:
+ *             type: string
+ *             format: date
+ *           required: false
+ *           description: Filter purchases up to this end date (inclusive).
  *       responses:
  *         '200':
  *           description: A list of purchases
@@ -114,101 +140,34 @@ router.post('/', async (req, res) => {
         const savedPurchase = await PurchaseService.save(purchase);
         res.json(savedPurchase);
     } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json({ error: error.message });
     }
 });
 
 router.get('/', async (req, res) => {
     try {
-        const purchases = [
-            {
-                email: 'test@test.com',
-                birthDate: '01/01/2000',
-                purchaseDate: '01/01/2021',
-                meetDate: '01/01/2021',
-                price: 15
-            },
-            {
-                email: 'jane@test.com',
-                birthDate: '05/05/1998',
-                purchaseDate: '02/02/2022',
-                meetDate: '01/01/2021',
-                price: 15
-            },
-            {
-                email: 'test@test.com',
-                birthDate: '01/01/2000',
-                purchaseDate: '01/01/2021',
-                meetDate: '01/01/2021',
-                price: 15
-            },
-            {
-                email: 'jane@test.com',
-                birthDate: '05/05/1998',
-                purchaseDate: '02/02/2022',
-                meetDate: '01/01/2021',
-                price: 15
-            },
-            {
-                email: 'test@test.com',
-                birthDate: '01/01/2000',
-                purchaseDate: '01/01/2021',
-                meetDate: '01/01/2021',
-                price: 15
-            },
-            {
-                email: 'jane@test.com',
-                birthDate: '05/05/1998',
-                purchaseDate: '02/02/2022',
-                meetDate: '01/01/2021',
-                price: 15
-            },
-            {
-                email: 'test@test.com',
-                birthDate: '01/01/2000',
-                purchaseDate: '01/01/2021',
-                meetDate: '01/01/2021',
-                price: 15
-            },
-            {
-                email: 'jane@test.com',
-                birthDate: '05/05/1998',
-                purchaseDate: '02/02/2022',
-                meetDate: '01/01/2021',
-                price: 15
-            },
-            {
-                email: 'test@test.com',
-                birthDate: '01/01/2000',
-                purchaseDate: '01/01/2021',
-                meetDate: '01/01/2021',
-                price: 15
-            },
-            {
-                email: 'jane@test.com',
-                birthDate: '05/05/1998',
-                purchaseDate: '02/02/2022',
-                meetDate: '01/01/2021',
-                price: 15
-            },
-            {
-                email: 'test@test.com',
-                birthDate: '01/01/2000',
-                purchaseDate: '01/01/2021',
-                meetDate: '01/01/2021',
-                price: 15
-            },
-            {
-                email: 'jane@test.com',
-                birthDate: '05/05/1998',
-                purchaseDate: '02/02/2022',
-                meetDate: '01/01/2021',
-                price: 15
-            }
-        ]
-        res.json(purchases);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const startDate = req.query.startDate ? new Date(req.query.startDate) : null;
+        const endDate = req.query.endDate ? new Date(req.query.endDate) : null;
+
+        const { totalItems, totalPages, currentPage, itemsPerPage, purchases } = await PurchaseService.getPaginatedPurchases(page, limit, startDate, endDate);
+
+        const paginationInfo = {
+            currentPage,
+            itemsPerPage,
+            totalItems,
+            totalPages,
+            hasNextPage: currentPage < totalPages,
+            hasPreviousPage: currentPage > 1
+        };
+
+        res.json({
+            paginationInfo,
+            data: purchases
+        });
     } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json({ error: error.message });
     }
 });
 

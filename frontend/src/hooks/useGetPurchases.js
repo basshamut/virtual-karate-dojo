@@ -1,44 +1,56 @@
 import {useEffect, useState} from 'react';
 import {getApplicationDomain, getBase64CredentialsFromSession} from "../utils/session";
 
-function useGetPurchases(isUser, hasSession) {
+function useGetPurchases(isUser, hasSession, page = 1, limit = 10, startDate, endDate) {
     const [purchases, setPurchases] = useState([]);
+    const [totalRecords, setTotalRecords] = useState(0); // Total de registros para la paginación
     const [error, setError] = useState(null);
     const base64Credentials = getBase64CredentialsFromSession()
 
     useEffect(() => {
         async function getPurchases() {
             try {
-                const domain = getApplicationDomain()
-                const response = await fetch(domain + '/purchases', {
+                const domain = getApplicationDomain();
+                let url = `${domain}/purchases?page=${page}&limit=${limit}`;
+
+                // Añadir los parámetros de filtrado por fecha si están seleccionados
+                if (startDate) {
+                    url += `&startDate=${startDate.toISOString()}`;  // Enviar la fecha en formato ISO
+                }
+                if (endDate) {
+                    url += `&endDate=${endDate.toISOString()}`;
+                }
+
+                const response = await fetch(url, {
                     headers: {
                         'Authorization': `Basic ${base64Credentials}`
                     }
                 });
 
                 if (!response.ok) {
-                    console.error('Network response was not ok', error);
-                    setError(error);
+                    const errorMessage = `Network response was not ok: ${response.statusText}`;
+                    console.error(errorMessage);
+                    setError(errorMessage);
+                    return;
                 }
 
-                const purchaseList = await response.json();
+                const { paginationInfo, data } = await response.json();
 
-                console.log("Lista -> " + purchaseList)
-
-                setPurchases(purchaseList || []);
+                setPurchases(data || []);
+                setTotalRecords(paginationInfo.totalItems); // Guarda el total de registros para la paginación
             } catch (error) {
-                console.error('Error fetching meets:', error);
-                setError(error);
+                console.error('Error fetching purchases:', error);
+                setError(error.message);
             }
-            setPurchases(purchases)
         }
 
-        if (hasSession && isUser) {
-            getPurchases()
+        // Llamar al servicio solo si el usuario tiene sesión y es válido
+        if (hasSession) {
+            getPurchases();
         }
-    }, [isUser, hasSession, purchases, base64Credentials, error]);
+    }, [isUser, hasSession, page, limit, startDate, endDate, base64Credentials]);
 
-    return {purchases, error};
+    return {purchases, totalRecords, error};
 }
 
 export default useGetPurchases;
