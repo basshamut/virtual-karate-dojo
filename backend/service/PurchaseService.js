@@ -1,18 +1,24 @@
 const purchaseRepository = require('../persistance/PurchaseRepository');
 const meetRepository = require('../persistance/MeetRepository');
 const userRepository = require("../persistance/UserRepository");
-const {Op, Sequelize} = require('sequelize');
+const {Op} = require('sequelize');
+const mailerService = require("./MailerService");
 const PurchaseService = {};
 
 PurchaseService.save = async function (purchase) {
     const meet = await meetRepository.findByPk(purchase.meetId);
     const user = await userRepository.findByPk(purchase.userId);
-    return await purchaseRepository.create({
+    const purchaseCreated =  await purchaseRepository.create({
         userId: user.id,
         meetId: meet.id,
         price: meet.price,
         purchaseDate: new Date(),
+        active: true
     });
+
+    await mailerService.sendInvoice(user,meet, purchaseCreated)
+
+    return purchaseCreated;
 };
 
 PurchaseService.getPaginatedPurchases = async function (page = 1, limit = 10, startDate = null, endDate = null) {

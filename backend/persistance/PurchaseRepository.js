@@ -33,6 +33,10 @@ const PurchaseRepository = sequelize.define('Purchase', {
     price: {
         type: DataTypes.FLOAT,
         allowNull: false
+    },
+    active:{
+        type: DataTypes.BOOLEAN,
+        allowNull: false
     }
 }, {
     timestamps: false

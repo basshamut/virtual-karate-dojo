@@ -47,7 +47,7 @@ export default function PrincipalCardContainer() {
                         className="flex flex-column lg:flex-row justify-content-between align-items-center xl:align-items-start lg:flex-1 gap-4">
                         <div className="flex flex-column align-items-center lg:align-items-start gap-3">
                             <div className="flex flex-column gap-1">
-                                <div className="text-2xl font-bold text-900">Clase de Karate Budo</div>
+                                <div className="text-2xl font-bold text-900">{meet.name}</div>
                                 <div className="text-2xl font-bold text-900">
                                     <span className="text-2xl font-semibold">{meet.price}€</span>
                                 </div>

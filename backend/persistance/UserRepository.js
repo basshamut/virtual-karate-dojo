@@ -27,6 +27,10 @@ const UserRepository = sequelize.define('User', {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
+    },
+    active:{
+        type: DataTypes.BOOLEAN,
+        allowNull: false
     }
 }, {
     timestamps: false

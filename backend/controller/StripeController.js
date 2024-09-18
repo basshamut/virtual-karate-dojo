@@ -1,4 +1,5 @@
 const express = require("express");
+const MeetService = require("../service/MeetService");
 const router = express.Router();
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -65,11 +66,12 @@ const domain = process.env.FRONTEND_URL;
 router.post('/create-checkout-session', async (req, res) => {
     try {
         const { meetId, userId } = req.body;
+        const meet = await MeetService.getOne(meetId)
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [
                 {
-                    price: 'price_1PSI1tKnVUk9u0R7xH1FCwss',
+                    price: meet.stripeCode,
                     quantity: 1,
                 },
             ],

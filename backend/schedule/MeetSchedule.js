@@ -10,25 +10,28 @@ const MeetSchedule = {}
 
 MeetSchedule.deleteOldMeets = cron.schedule('0 0 * * *', async () => {
     try {
-        const result = await meetRepository.destroy({
-            where: {
-                meetDate: {
-                    [Op.lt]: new Date()
+        const result = await meetRepository.update(
+            {active: false}, // Establecer el campo 'active' a false
+            {
+                where: {
+                    meetDate: {
+                        [Op.lt]: new Date()
+                    }
                 }
             }
-        })
+        );
 
-        console.log(`Se eliminaron ${result} registros.`)
+        console.log(`Se actualizaron ${result[0]} registros.`); // 'result[0]' contiene el número de filas afectadas
     } catch (err) {
-        console.error('Error al eliminar registros:', err)
+        console.error('Error al actualizar registros:', err);
     }
-})
+});
 
 MeetSchedule.sendMeets = cron.schedule('0 * * * *', async () => {
     try {
         const now = moment().tz('GMT')
-        const currentHour = now.clone().set({ second: 0, millisecond: 0 })
-        const nextHour = now.clone().add(1, 'hours').set({ second: 0, millisecond: 0 })
+        const currentHour = now.clone().set({second: 0, millisecond: 0})
+        const nextHour = now.clone().add(1, 'hours').set({second: 0, millisecond: 0})
 
         const meets = await meetRepository.findAll({
             where: {
@@ -63,11 +66,13 @@ MeetSchedule.sendMeets = cron.schedule('0 * * * *', async () => {
             }
 
             //Eliminamos los meets ya enviados
-            await meetRepository.destroy({
-                where: {
-                    id: meet.id
-                }
-            })
+            await meetRepository.update(
+                {active: false},
+                {
+                    where: {
+                        id: meet.id
+                    }
+                })
         }
 
     } catch (err) {

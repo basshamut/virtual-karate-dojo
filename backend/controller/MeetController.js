@@ -1,4 +1,8 @@
 const express = require("express")
+const multer = require('multer');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 const meetService = require('../service/MeetService')
 
 const router = express.Router()
@@ -52,19 +56,26 @@ const router = express.Router()
  *     security:
  *       - basicAuth: []
  */
-router.post('/', (request, response) => {
-    response.setHeader('Content-Type', 'application/json')
+router.post('/', upload.single('image'), async (request, response) => {
+    response.setHeader('Content-Type', 'application/json');
 
+    // Extraer los datos y la imagen de la solicitud
     const meet = {
         meetUrl: request.body.meetUrl,
         meetDate: request.body.meetDate,
-        price: request.body.price
+        product: JSON.parse(request.body.product), // Convertir la cadena de producto a objeto
+        image: request.file // La imagen subida
+    };
+
+    try {
+        // Guardar la reunión usando el servicio
+        const newMeet = await meetService.save(meet);
+        response.status(201).send(newMeet);
+    } catch (error) {
+        console.error('Error al guardar la reunión:', error);
+        response.status(500).send({ error: 'Error al guardar la reunión' });
     }
-
-    const newMeet = meetService.save(meet)
-
-    response.status(201).send(newMeet)
-})
+});
 
 /**
  * @swagger

@@ -18,6 +18,26 @@ const MeetRepository = sequelize.define('Meet', {
     price: {
         type: DataTypes.FLOAT,
         allowNull: false
+    },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    description: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    stripeCode: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    imagePath: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    active:{
+        type: DataTypes.BOOLEAN,
+        allowNull: false
     }
 }, {
     timestamps: false

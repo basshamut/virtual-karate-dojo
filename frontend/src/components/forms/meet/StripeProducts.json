@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Clase de Karate Budo: Kihon",
+    "description": "Clase que abarca el estudio de Kihon",
+    "stripeCode": "price_1PSI1tKnVUk9u0R7xH1FCwss",
+    "price": 15.0
+  },
+  {
+    "name": "Clase de Karate Budo: Kata",
+    "description": "Clase que abarca el estudio de Katas",
+    "stripeCode": "price_1Pxpm6KnVUk9u0R7sL2HKxVe",
+    "price": 15.0
+  }
+]
