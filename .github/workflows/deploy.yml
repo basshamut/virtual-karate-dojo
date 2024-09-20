@@ -69,6 +69,9 @@ jobs:
             echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> /var/www/html/virtual-dojo/backend/.env
             echo "EMAIL_PASS=${{ secrets.EMAIL_PASS }}" >> /var/www/html/virtual-dojo/backend/.env
             echo "API_DOMAIN=${{ secrets.API_DOMAIN }}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "CLOUDINARY_CLOUD_API_KEY=${{ secrets.CLOUDINARY_CLOUD_API_KEY }}" >> /var/www/html/virtual-dojo/backend/.env
+            echo "CLOUDINARY_CLOUD_API_SECRET=${{ secrets.CLOUDINARY_CLOUD_API_SECRET }}" >> /var/www/html/virtual-dojo/backend/.env
   
           # Conectar al VPS y reiniciar el backend
           sshpass -p "${SSH_PASSWORD}" ssh -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" << 'EOF'
