@@ -42,7 +42,7 @@ export default function PrincipalCardContainer() {
             <div className="col-12 meet-item">
                 <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
                     <img className="w-9 sm:w-4rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
-                         src={'./Shotokan_Logo.svg'} alt={meet.name}/>
+                         src={meet.imagePath} alt={meet.name}/>
                     <div
                         className="flex flex-column lg:flex-row justify-content-between align-items-center xl:align-items-start lg:flex-1 gap-4">
                         <div className="flex flex-column align-items-center lg:align-items-start gap-3">
