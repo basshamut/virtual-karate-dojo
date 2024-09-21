@@ -1,21 +1,19 @@
-/* PrincipalCardContainer.css */
-
-.principal-card-container {
-    padding: 1rem;
-}
-
-.meet-item {
+.dashboard-container {
     display: flex;
-    flex-direction: column;
-}
-
-.meet-item .flex {
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
 }
 
-@media (min-width: 768px) {
-    .meet-item .flex {
-        flex-direction: row;
+.dashboard-section {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column; /* Cambia a columna en móviles */
+    }
+
+    .dashboard-section {
+        margin-right: 0;
     }
 }

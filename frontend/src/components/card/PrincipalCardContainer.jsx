@@ -1,20 +1,24 @@
+import { useState } from 'react';
 import MeetRegisterForm from "../forms/meet/MeetRegisterForm.jsx";
-import {hasSession, isAdmin, isUser} from "../../utils/session.jsx";
+import { hasSession, isAdmin, isUser } from "../../utils/session.jsx";
 import useFetchMeets from '../../hooks/useFetchMeets.js';
 import useSessionIds from '../../hooks/useSessionIds.js';
-import {Button} from 'primereact/button';
-import {DataScroller} from "primereact/datascroller";
-import {Divider} from 'primereact/divider';
-import {format} from "date-fns";
-import {loadStripe} from "@stripe/stripe-js";
+import { Button } from 'primereact/button';
+import { DataScroller } from "primereact/datascroller";
+import { Divider } from 'primereact/divider';
+import { format } from "date-fns";
+import { loadStripe } from "@stripe/stripe-js";
 import './PrincipalCardContainer.css';
 import PurchasesTable from "../table/PurchasesTable";
+import ImageModal from '../modal/ImageModal';
 
 export default function PrincipalCardContainer() {
+    const [isOpen, setIsOpen] = useState(false);
+    const [imageSrc, setImageSrc] = useState('');
     const userSession = hasSession();
     const isUserValue = isUser();
     const isAdminValue = isAdmin();
-    const {meets, error} = useFetchMeets(isUserValue, userSession);
+    const { meets, error } = useFetchMeets(isUserValue, userSession);
 
     const stripePromise = loadStripe("pk_test_51PSHknKnVUk9u0R7xWznb2PU2LeYeOgFXDVB14wP4BvJQBJ3RdH0ZLF801Ka7oLlNd7pFV7VZndQa2soCDluMFf200UugFXgnD");
     const fetchSessionId = useSessionIds();
@@ -23,7 +27,7 @@ export default function PrincipalCardContainer() {
         const stripe = await stripePromise;
         try {
             const sessionId = await fetchSessionId(meet);
-            const {error} = await stripe.redirectToCheckout({sessionId});
+            const { error } = await stripe.redirectToCheckout({ sessionId });
 
             if (error) {
                 console.error('Stripe checkout error', error);
@@ -31,6 +35,15 @@ export default function PrincipalCardContainer() {
         } catch (error) {
             console.error('Error during checkout', error);
         }
+    };
+
+    const openModal = (imagePath) => {
+        setImageSrc(imagePath);
+        setIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsOpen(false);
     };
 
     if (error) {
@@ -41,8 +54,13 @@ export default function PrincipalCardContainer() {
         return (
             <div className="col-12 meet-item">
                 <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
-                    <img className="w-9 sm:w-4rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
-                         src={meet.imagePath} alt={meet.name}/>
+                    <img
+                        className="w-9 sm:w-4rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
+                        src={meet.imagePath}
+                        alt={meet.name}
+                        onClick={() => openModal(meet.imagePath)}  // Abrir modal al hacer clic
+                        style={{ cursor: 'pointer' }}  // Cambiar el cursor para indicar clic
+                    />
                     <div
                         className="flex flex-column lg:flex-row justify-content-between align-items-center xl:align-items-start lg:flex-1 gap-4">
                         <div className="flex flex-column align-items-center lg:align-items-start gap-3">
@@ -61,7 +79,7 @@ export default function PrincipalCardContainer() {
                         </div>
                     </div>
                 </div>
-                <Divider/>
+                <Divider />
             </div>
         );
     };
@@ -84,6 +102,8 @@ export default function PrincipalCardContainer() {
                     </div>
                 </div>
             )}
+            {/* ImageModal para agrandar la imagen */}
+            <ImageModal isOpen={isOpen} onClose={closeModal} imageSrc={imageSrc} />
         </div>
     );
 }

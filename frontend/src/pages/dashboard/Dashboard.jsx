@@ -6,7 +6,6 @@ import InternalDialog from "../../components/dialog/InternalDialog.jsx";
 import {start, useEnd, useMenuItems} from "../../components/menu/MenuItemData.jsx";
 import {hasSession} from "../../utils/session.jsx";
 import './Dashboard.css'
-import background from "/Shotokan_Fondo.svg";
 import useSavePurchase from "../../hooks/useSavePurchase.js";
 
 export default function Dashboard() {

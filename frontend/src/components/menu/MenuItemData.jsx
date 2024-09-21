@@ -24,7 +24,7 @@ export const useMenuItems = () => {
     ];
 };
 
-export const start = <img alt="logo" src="Shotokan_Logo.svg" height="40" className="mr-2"></img>;
+export const start = <img alt="logo" src="https://res.cloudinary.com/di7qko5q9/image/upload/v1726927983/karate-classes/bh0arvovagfthgqp6jrn.png" height="40" className="mr-2"></img>;
 export const useEnd = () => {
     const navigate = useNavigate();
     const closeSession = () => {
