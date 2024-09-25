@@ -1,6 +1,7 @@
 import {InputText} from "primereact/inputtext";
 import {Button} from "primereact/button";
 import {useState} from "react";
+import { useNavigate } from "react-router-dom";
 import {Calendar} from "primereact/calendar";
 import {Dropdown} from "primereact/dropdown"; // Importa el Dropdown
 import styled from 'styled-components';
@@ -75,6 +76,7 @@ export default function MeetRegisterForm() {
     const [selectedImage, setSelectedImage] = useState(null); // Añadir estado para la imagen
     const domain = getApplicationDomain();
     const base64Credentials = getBase64CredentialsFromSession();
+    const navigate = useNavigate();
 
     // Preprocesar los productos para mostrar nombre y precio con longitud fija
     const formattedProducts = products.map(product => {
@@ -119,10 +121,7 @@ export default function MeetRegisterForm() {
                 return response.json();
             })
             .then(() => {
-                setUrl('');
-                setDate(today);
-                setSelectedProduct(null);
-                setSelectedImage(null); // Resetea la imagen seleccionada
+                navigate(0);
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
