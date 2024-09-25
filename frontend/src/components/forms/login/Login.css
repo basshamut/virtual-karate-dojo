@@ -1,0 +1,6 @@
+.login-logo {
+    width: 150px; /* Ajusta este valor según el tamaño que desees */
+    height: auto; /* Mantiene la proporción de la imagen */
+    display: block; /* Opcional: para centrar la imagen */
+    margin: 0 auto 20px; /* Opcional: para centrar la imagen y añadir espacio inferior */
+}

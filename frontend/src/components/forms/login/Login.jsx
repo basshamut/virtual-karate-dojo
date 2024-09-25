@@ -1,10 +1,11 @@
+import {useState} from "react"
+import {useNavigate} from "react-router-dom"
 import {Button} from 'primereact/button'
 import {Dialog} from 'primereact/dialog'
 import {InputText} from "primereact/inputtext"
-import {useState} from "react"
-import {useNavigate} from "react-router-dom"
-import {getApplicationDomain, startSession} from "../../../utils/session.jsx"
 import {Message} from 'primereact/message'
+import {getApplicationDomain, startSession} from "../../../utils/session.jsx"
+import './Login.css';
 
 export default function Login() {
     const [visible, setVisible] = useState(true)
@@ -69,6 +70,7 @@ export default function Login() {
                         borderRadius: '12px',
                         backgroundImage: 'radial-gradient(circle at left top, var(--primary-400), var(--primary-700))'
                     }}>
+                        <img alt="Logo" className="login-logo" src="https://res.cloudinary.com/di7qko5q9/image/upload/v1727294772/karate-classes/sxgzokc8mysthpctbiir.png"/>
                         <div className="inline-flex flex-column gap-2">
                             <label htmlFor="username" className="text-primary-50 font-semibold">
                                 Username
