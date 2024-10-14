@@ -48,19 +48,21 @@ jobs:
           SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
           SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
         run: |
-          # Crear directorios en el VPS
+          # Crear directorios en el VPS para frontend y backend
           sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/frontend'
           sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/backend'
-
-          # Copiar el build del frontend al VPS
+          
+          # --- DEPLOY DEL FRONTEND ---
+          echo "Desplegando el frontend"
           rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=120" frontend/dist/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/frontend"
           rsync -avz -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=120" frontend/.env "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/frontend/.env"
-
-          # Copiar el backend al VPS
+          
+          # --- DEPLOY DEL BACKEND ---
+          echo "Desplegando el backend"
           rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=120" backend/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/backend"
           
           # Crear el archivo .env para el backend en el VPS
-          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<EOF
+          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<-EOF
             echo "PORT=${{ secrets.PORT }}" > /var/www/html/virtual-dojo/backend/.env
             echo "DATA_BASE_URL=${{ secrets.DATA_BASE_URL }}" >> /var/www/html/virtual-dojo/backend/.env
             echo "FRONTEND_URL=${{ secrets.FRONTEND_URL }}" >> /var/www/html/virtual-dojo/backend/.env
@@ -72,13 +74,15 @@ jobs:
             echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> /var/www/html/virtual-dojo/backend/.env
             echo "CLOUDINARY_CLOUD_API_KEY=${{ secrets.CLOUDINARY_CLOUD_API_KEY }}" >> /var/www/html/virtual-dojo/backend/.env
             echo "CLOUDINARY_CLOUD_API_SECRET=${{ secrets.CLOUDINARY_CLOUD_API_SECRET }}" >> /var/www/html/virtual-dojo/backend/.env
-  
-          # Conectar al VPS y reiniciar el backend
-          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" << 'EOF'
-          cd /var/www/html/virtual-dojo/backend
-          npm install pm2 -g
-          npm install --only=prod
-          set -x  # Habilita el modo de depuración
-          pm2 restart all || pm2 start server.js --name virtual-dojo > /dev/null 2>&1 & disown
-          exit 0
+          EOF
+          
+          # --- REINICIAR EL BACKEND ---
+          echo "Reiniciando el backend"
+          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<-EOF
+            cd /var/www/html/virtual-dojo/backend
+            npm install pm2 -g
+            npm install --only=prod
+            pm2 restart all || pm2 start server.js --name virtual-dojo --no-daemon > /dev/null 2>&1 &
+            sleep 5
+            exit 0
           EOF
