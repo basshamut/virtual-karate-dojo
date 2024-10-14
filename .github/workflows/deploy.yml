@@ -49,18 +49,18 @@ jobs:
           SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
         run: |
           # Crear directorios en el VPS
-          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/frontend'
-          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/backend'
+          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -o ServerAliveInterval=120 "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/frontend'
+          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -o ServerAliveInterval=120 "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/backend'
 
           # Copiar el build del frontend al VPS
-          rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no" frontend/dist/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/frontend"
-          rsync -avz -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no" frontend/.env "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/frontend/.env"
+          rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=120" frontend/dist/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/frontend"
+          rsync -avz -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=120" frontend/.env "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/frontend/.env"
 
           # Copiar el backend al VPS
-          rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no" backend/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/backend"
+          rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=120" backend/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/backend"
           
           # Crear el archivo .env para el backend en el VPS
-          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<EOF
+          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -o ServerAliveInterval=120 "${SSH_USERNAME}@${SSH_HOST}" <<EOF
             echo "PORT=${{ secrets.PORT }}" > /var/www/html/virtual-dojo/backend/.env
             echo "DATA_BASE_URL=${{ secrets.DATA_BASE_URL }}" >> /var/www/html/virtual-dojo/backend/.env
             echo "FRONTEND_URL=${{ secrets.FRONTEND_URL }}" >> /var/www/html/virtual-dojo/backend/.env
@@ -74,7 +74,7 @@ jobs:
             echo "CLOUDINARY_CLOUD_API_SECRET=${{ secrets.CLOUDINARY_CLOUD_API_SECRET }}" >> /var/www/html/virtual-dojo/backend/.env
   
           # Conectar al VPS y reiniciar el backend
-          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" << 'EOF'
+          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -o ServerAliveInterval=120 "${SSH_USERNAME}@${SSH_HOST}" << 'EOF'
           cd /var/www/html/virtual-dojo/backend
           npm install pm2 -g
           npm install --only=prod
