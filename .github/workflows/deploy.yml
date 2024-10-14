@@ -79,6 +79,6 @@ jobs:
           npm install pm2 -g
           npm install --only=prod
           set -x  # Habilita el modo de depuración
-          pm2 restart all || nohup pm2 start server.js --name virtual-dojo > /dev/null 2>&1 &
+          pm2 restart all || pm2 start server.js --name virtual-dojo > /dev/null 2>&1 & disown
           exit 0
           EOF
