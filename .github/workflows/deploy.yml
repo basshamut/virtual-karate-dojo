@@ -69,19 +69,21 @@ jobs:
           echo "Desplegando el backend"
           rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=120" backend/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/backend"
           
-          # Crear el archivo .env para el backend en el VPS
+          # Escribir el archivo .env en una sola operación
           sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<-EOF
-            echo "PORT=${{ secrets.PORT }}" > /var/www/html/virtual-dojo/backend/.env
-            echo "DATA_BASE_URL=${{ secrets.DATA_BASE_URL }}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "FRONTEND_URL=${{ secrets.FRONTEND_URL }}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "EMAIL_PASS=${{ secrets.EMAIL_PASS }}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "API_DOMAIN=${{ secrets.API_DOMAIN }}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "CLOUDINARY_CLOUD_API_KEY=${{ secrets.CLOUDINARY_CLOUD_API_KEY }}" >> /var/www/html/virtual-dojo/backend/.env
-            echo "CLOUDINARY_CLOUD_API_SECRET=${{ secrets.CLOUDINARY_CLOUD_API_SECRET }}" >> /var/www/html/virtual-dojo/backend/.env
+            cat <<EOT > /var/www/html/virtual-dojo/backend/.env
+            PORT=${{ secrets.PORT }}
+            DATA_BASE_URL=${{ secrets.DATA_BASE_URL }}
+            FRONTEND_URL=${{ secrets.FRONTEND_URL }}
+            STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
+            EMAIL_HOST=${{ secrets.EMAIL_HOST }}
+            EMAIL_USER=${{ secrets.EMAIL_USER }}
+            EMAIL_PASS=${{ secrets.EMAIL_PASS }}
+            API_DOMAIN=${{ secrets.API_DOMAIN }}
+            CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
+            CLOUDINARY_CLOUD_API_KEY=${{ secrets.CLOUDINARY_CLOUD_API_KEY }}
+            CLOUDINARY_CLOUD_API_SECRET=${{ secrets.CLOUDINARY_CLOUD_API_SECRET }}
+            EOT
           EOF
 
       - name: Deploy to VPS (Restarting Backend)
