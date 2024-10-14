@@ -78,6 +78,6 @@ jobs:
           cd /var/www/html/virtual-dojo/backend
           npm install pm2 -g
           npm install --only=prod
-          pm2 restart all || pm2 start server.js --name virtual-dojo --no-daemon
-          exit
+          pm2 restart all || pm2 start server.js --name virtual-dojo
+          exit 0
           EOF
