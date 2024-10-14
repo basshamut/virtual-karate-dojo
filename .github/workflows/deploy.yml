@@ -78,6 +78,7 @@ jobs:
           cd /var/www/html/virtual-dojo/backend
           npm install pm2 -g
           npm install --only=prod
-          pm2 restart all || pm2 start server.js --name virtual-dojo
+          set -x  # Habilita el modo de depuración
+          pm2 restart all || nohup pm2 start server.js --name virtual-dojo > /dev/null 2>&1 &
           exit 0
           EOF
