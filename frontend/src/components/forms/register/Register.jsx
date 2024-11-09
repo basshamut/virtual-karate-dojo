@@ -85,6 +85,11 @@ export default function Register() {
         }
     }
 
+    function doCancel() {
+        setVisible(false)
+        navigate("/dojo/login")
+    }
+
     function pushDate(e) {
         console.log(e)
         console.log(e.value)
@@ -102,6 +107,8 @@ export default function Register() {
                         borderRadius: '12px',
                         backgroundImage: 'radial-gradient(circle at left top, var(--primary-400), var(--primary-700))'
                     }}>
+                        <img alt="Logo" className="login-logo"
+                             src="https://res.cloudinary.com/di7qko5q9/image/upload/v1727294772/karate-classes/sxgzokc8mysthpctbiir.png"/>
                         <div className="inline-flex flex-column gap-2">
                             <label htmlFor="username" className="text-primary-50 font-semibold">
                                 Email (Este será su nombre de usuario)
@@ -142,6 +149,10 @@ export default function Register() {
                         </div>
                         <div className="flex align-items-center gap-2">
                             <Button label="Registrar" onClick={() => doRegister()} text
+                                    className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"></Button>
+                        </div>
+                        <div className="flex align-items-center gap-2">
+                            <Button label="Cancelar" onClick={() => doCancel()} text
                                     className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"></Button>
                         </div>
                     </div>
