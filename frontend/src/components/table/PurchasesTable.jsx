@@ -35,7 +35,7 @@ export default function PurchasesTable() {
     };
 
     const meetDateTemplate = (rowData) => {
-        return formatDate(rowData.Meet.meetDate);
+        return formatDate(rowData.meet.meetDate);
     };
 
     return (
@@ -64,9 +64,9 @@ export default function PurchasesTable() {
                     lazy
                     first={(page - 1) * rowsPerPage}
                 >
-                    <Column field="User.email" header="Email del Usuario" sortable></Column>
+                    <Column field="user.email" header="Email del Usuario" sortable></Column>
                     <Column field="purchaseDate" header="Fecha de Compra" sortable body={purchaseDateTemplate}></Column>
-                    <Column field="Meet.meetDate" header="Fecha de Clase" sortable body={meetDateTemplate}></Column>
+                    <Column field="meet.meetDate" header="Fecha de Clase" sortable body={meetDateTemplate}></Column>
                     <Column field="price" header="Precio" sortable></Column>
                 </DataTable>
             </div>

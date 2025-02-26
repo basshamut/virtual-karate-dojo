@@ -11,127 +11,6 @@ function validatePassword(password) {
     return password.length >= 8;
 }
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       required:
- *         - email
- *         - birthDate
- *         - password
- *       properties:
- *         email:
- *           type: string
- *           format: email
- *           description: El correo electrónico del usuario
- *         birthDate:
- *           type: string
- *           format: date
- *           description: La fecha de nacimiento del usuario
- *         password:
- *           type: string
- *           format: password
- *           description: La contraseña del usuario
- *       example:
- *         email: "usuario@example.com"
- *         birthDate: "2000-01-01"
- *         password: "password1234"
- *
- *     UserLogin:
- *       type: object
- *       required:
- *         - user
- *         - password
- *       properties:
- *         user:
- *           type: string
- *           format: email
- *           description: El correo electrónico del usuario
- *         password:
- *           type: string
- *           format: password
- *           description: La contraseña del usuario (Base64 encoded)
- *       example:
- *         user: "usuario@example.com"
- *         password: "cGFzc3dvcmQxMjM="
- *
- *     UserRole:
- *       type: object
- *       properties:
- *         userMail:
- *           type: string
- *           format: email
- *           description: El correo electrónico del usuario
- *         role:
- *           type: string
- *           description: El rol del usuario
- *       example:
- *         userMail: "usuario@example.com"
- *         role: "admin"
- *
- *     UserValidation:
- *       type: object
- *       required:
- *         - userMail
- *       properties:
- *         userMail:
- *           type: string
- *           format: email
- *           description: El correo electrónico del usuario
- *       example:
- *         userMail: "usuario@example.com"
- *
- *     Error:
- *       type: object
- *       properties:
- *         message:
- *           type: string
- *           description: El mensaje de error
- *       example:
- *         message: "El correo electrónico ya está registrado"
- *
- *     UserResponse:
- *       type: object
- *       properties:
- *         email:
- *           type: string
- *           format: email
- *           description: El correo electrónico del usuario
- *         birthDate:
- *           type: string
- *           format: date
- *           description: La fecha de nacimiento del usuario
- *         role:
- *           type: string
- *           description: El rol del usuario
- *       example:
- *         email: "usuario@example.com"
- *         birthDate: "2000-01-01"
- *         role: "user"
- */
-
-/**
- * @swagger
- * /api/users/register:
- *   post:
- *     summary: Registra un nuevo usuario
- *     tags: [Usuarios]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/User'
- *     responses:
- *       201:
- *         description: Registro exitoso
- *       400:
- *         description: Error en la validación de los datos
- *       409:
- *         description: El email ya está registrado
- */
 router.post('/register', async (req, res) => {
     const { user, date, password } = req.body;
 
@@ -174,26 +53,6 @@ router.post('/register', async (req, res) => {
     res.status(201).json({ message: 'Registro exitoso' });
 });
 
-/**
- * @swagger
- * /api/users/login:
- *   post:
- *     summary: Inicia sesión en la aplicación
- *     tags: [Usuarios]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UserLogin'
- *     responses:
- *       200:
- *         description: Inicio de sesión exitoso
- *       400:
- *         description: Error en la validación de los datos
- *       404:
- *         description: Usuario o contraseña incorrectos
- */
 router.post('/login', async (req, res) => {
     const user = req.body.user;
     const password = atob(req.body.password);
@@ -224,51 +83,12 @@ router.post('/login', async (req, res) => {
     res.status(200).json(userFound);
 });
 
-/**
- * @swagger
- * /api/users/roles:
- *   get:
- *     summary: Obtiene los roles de un usuario
- *     tags: [Usuarios]
- *     parameters:
- *       - in: query
- *         name: userMail
- *         schema:
- *           type: string
- *         required: true
- *         description: El email del usuario
- *     responses:
- *       200:
- *         description: Roles del usuario
- *       400:
- *         description: Error en la solicitud
- */
 router.get('/roles', async (req, res) => {
     const userMail = req.query.userMail;
     const role = await userService.getRole(userMail);
     res.status(200).json(role);
 });
 
-/**
- * @swagger
- * /api/users/validate:
- *   patch:
- *     summary: Valida un usuario
- *     tags: [Usuarios]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UserValidation'
- *     responses:
- *       200:
- *         description: Validación exitosa
- *       400:
- *         description: El email ya está validado o no fue proporcionado
- *       404:
- *         description: El email no está registrado
- */
 router.patch('/validate', async (req, res) => {
     const userMail = req.body.userMail;
     if (!userMail) {
