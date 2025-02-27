@@ -35,9 +35,9 @@ jobs:
         run: |
           npm run build:frontend
 
-      - name: Install dependencies for backend
-        run: |
-          npm run install:backend
+#      - name: Install dependencies for backend
+#        run: |
+#          npm run install:backend
 
       - name: Install sshpass
         run: sudo apt-get install -y sshpass
@@ -56,55 +56,55 @@ jobs:
           rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=120" frontend/dist/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/frontend"
           rsync -avz -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=120" frontend/.env "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/frontend/.env"
 
-      - name: Deploy to VPS (Backend)
-        env:
-          SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
-          SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
-          SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
-        run: |
-          # Crear directorio en el VPS para el backend
-          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -o ServerAliveInterval=300 "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/backend'
-          
-          # Copiar el backend al VPS
-          echo "Desplegando el backend"
-          rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=300" backend/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/backend"
-          
-          # Crear el archivo .env localmente
-          echo "Creando archivo .env localmente"
-          cat <<EOT > .env
-          PORT=${{ secrets.PORT }}
-          DATA_BASE_URL=${{ secrets.DATA_BASE_URL }}
-          FRONTEND_URL=${{ secrets.FRONTEND_URL }}
-          STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
-          EMAIL_HOST=${{ secrets.EMAIL_HOST }}
-          EMAIL_USER=${{ secrets.EMAIL_USER }}
-          EMAIL_PASS=${{ secrets.EMAIL_PASS }}
-          API_DOMAIN=${{ secrets.API_DOMAIN }}
-          CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
-          CLOUDINARY_CLOUD_API_KEY=${{ secrets.CLOUDINARY_CLOUD_API_KEY }}
-          CLOUDINARY_CLOUD_API_SECRET=${{ secrets.CLOUDINARY_CLOUD_API_SECRET }}
-          EOT
-          
-          # Copiar el archivo .env al VPS
-          echo "Copiando archivo .env al servidor"
-          rsync -avz -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=300" .env "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/backend/.env"
-          
-          # Eliminar el archivo .env local después de la sincronización
-          rm .env
-
-      - name: Deploy to VPS (Restarting Backend)
-        env:
-          SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
-          SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
-          SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
-        run: |
-          # Reiniciar el backend
-          echo "Reiniciando el backend"
-          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<-EOF
-            cd /var/www/html/virtual-dojo/backend
-            npm install pm2 -g
-            npm install --only=prod
-            pm2 restart all || pm2 start server.js --name virtual-dojo --no-daemon > /dev/null 2>&1 &
-            sleep 5
-            exit 0
-          EOF
+#      - name: Deploy to VPS (Backend)
+#        env:
+#          SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
+#          SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
+#          SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
+#        run: |
+#          # Crear directorio en el VPS para el backend
+#          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -o ServerAliveInterval=300 "${SSH_USERNAME}@${SSH_HOST}" 'mkdir -p /var/www/html/virtual-dojo/backend'
+#
+#          # Copiar el backend al VPS
+#          echo "Desplegando el backend"
+#          rsync -avz --delete -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=300" backend/ "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/backend"
+#
+#          # Crear el archivo .env localmente
+#          echo "Creando archivo .env localmente"
+#          cat <<EOT > .env
+#          PORT=${{ secrets.PORT }}
+#          DATA_BASE_URL=${{ secrets.DATA_BASE_URL }}
+#          FRONTEND_URL=${{ secrets.FRONTEND_URL }}
+#          STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
+#          EMAIL_HOST=${{ secrets.EMAIL_HOST }}
+#          EMAIL_USER=${{ secrets.EMAIL_USER }}
+#          EMAIL_PASS=${{ secrets.EMAIL_PASS }}
+#          API_DOMAIN=${{ secrets.API_DOMAIN }}
+#          CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
+#          CLOUDINARY_CLOUD_API_KEY=${{ secrets.CLOUDINARY_CLOUD_API_KEY }}
+#          CLOUDINARY_CLOUD_API_SECRET=${{ secrets.CLOUDINARY_CLOUD_API_SECRET }}
+#          EOT
+#
+#          # Copiar el archivo .env al VPS
+#          echo "Copiando archivo .env al servidor"
+#          rsync -avz -e "sshpass -p '${SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=300" .env "${SSH_USERNAME}@${SSH_HOST}:/var/www/html/virtual-dojo/backend/.env"
+#
+#          # Eliminar el archivo .env local después de la sincronización
+#          rm .env
+#
+#      - name: Deploy to VPS (Restarting Backend)
+#        env:
+#          SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
+#          SSH_USERNAME: ${{ secrets.VPS_SSH_USERNAME }}
+#          SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
+#        run: |
+#          # Reiniciar el backend
+#          echo "Reiniciando el backend"
+#          sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no "${SSH_USERNAME}@${SSH_HOST}" <<-EOF
+#            cd /var/www/html/virtual-dojo/backend
+#            npm install pm2 -g
+#            npm install --only=prod
+#            pm2 restart all || pm2 start server.js --name virtual-dojo --no-daemon > /dev/null 2>&1 &
+#            sleep 5
+#            exit 0
+#          EOF
