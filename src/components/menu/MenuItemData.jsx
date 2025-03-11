@@ -29,7 +29,7 @@ export const useEnd = () => {
     const navigate = useNavigate();
     const closeSession = () => {
         clearSession()
-        navigate("/dojo")
+        navigate('/')
     }
 
     return (

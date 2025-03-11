@@ -51,5 +51,5 @@ export const getBase64CredentialsFromSession = () => {
 }
 
 export const getApplicationDomain = () => {
-    return import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : 'http://86.38.204.61'
+    return import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : 'http://localhost:8080'
 }
