@@ -9,7 +9,7 @@ export const useMenuItems = () => {
             label: 'Inicio',
             icon: 'pi pi-home',
             command: () => {
-                navigate('/dojo/dashboard')
+                navigate('/dashboard')
             }
         }
         //TODO que opciones de menu se podrian agregar?
@@ -18,7 +18,7 @@ export const useMenuItems = () => {
         //     label: 'Productos',
         //     icon: 'pi pi-shopping-cart',
         //     command: () => {
-        //         navigate('/dojo/dashboard')
+        //         navigate('/dashboard')
         //     }
         // }
     ];

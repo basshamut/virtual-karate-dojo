@@ -77,7 +77,7 @@ export default function Register() {
                 })
                 .then(() => {
                     setVisible(false)
-                    navigate("/dojo/email-verification")
+                    navigate("/email-verification")
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error)
@@ -87,7 +87,7 @@ export default function Register() {
 
     function doCancel() {
         setVisible(false)
-        navigate("/dojo/login")
+        navigate("/login")
     }
 
     function pushDate(e) {

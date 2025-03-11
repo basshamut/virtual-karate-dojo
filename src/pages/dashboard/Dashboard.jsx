@@ -24,7 +24,7 @@ export default function Dashboard() {
     }
     useEffect(() => {
         if (!hasSession()) {
-            navigate('/dojo/login')
+            navigate('/login')
         }
         setMeetId(params.get('meetId'))
         setUserId(params.get('userId'))

@@ -19,7 +19,7 @@ function InnerApp() {
         const interval = setInterval(() => {
             const sessionUser = getSession()
             if (!sessionUser) {
-                navigate('/dojo/login')
+                navigate('/login')
             }
         }, SESSION_DURATION) // Verifica cada 1 minuto
         return () => clearInterval(interval)
@@ -29,12 +29,12 @@ function InnerApp() {
         <>
 
             <Routes>
-                <Route path="/dojo/login" element={<Login/>}/>
-                <Route path="/dojo/register" element={<Register/>}/>
-                <Route path="/dojo/validation" element={<Validation/>}/>
-                <Route path="/dojo/dashboard" element={<Dashboard/>}/>
-                <Route path="/dojo/email-verification" element={<EmailVerification/>}/>
-                <Route path="/dojo" element={<Login/>}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/register" element={<Register/>}/>
+                <Route path="/validation" element={<Validation/>}/>
+                <Route path="/dashboard" element={<Dashboard/>}/>
+                <Route path="/email-verification" element={<EmailVerification/>}/>
+                <Route path="/" element={<Login/>}/>
             </Routes>
         </>
     )

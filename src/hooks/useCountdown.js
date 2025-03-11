@@ -12,7 +12,7 @@ export function useCountdown(initialCount, isActive) {
                 setCountdown(prevCountdown => prevCountdown - 1)
             }, 1000)
         } else if (countdown === 0) {
-            navigate("/dojo/login")
+            navigate("/login")
         }
         return () => clearInterval(timer)
     }, [isActive, countdown, navigate])

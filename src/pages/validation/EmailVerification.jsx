@@ -13,7 +13,7 @@ export default function EmailVerification() {
                 <h2 className="text-primary-50">Verificación de correo electrónico</h2>
                 <p className="text-primary-50">Se ha enviado un enlace de verificación a su correo electrónico. Por favor, verifique su correo para activar su cuenta.</p>
                 <div className="flex align-items-center gap-2">
-                    <Button label="Aceptar" onClick={() => navigate("/dojo/login")} text
+                    <Button label="Aceptar" onClick={() => navigate("/login")} text
                             className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"></Button>
                 </div>
             </div>

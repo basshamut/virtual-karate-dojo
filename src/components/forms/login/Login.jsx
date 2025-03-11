@@ -43,7 +43,7 @@ export default function Login() {
                 .then(data => {
                     data.password = btoa(password)
                     startSession(data)
-                    navigate("/dojo/dashboard")
+                    navigate("/dashboard")
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error)
@@ -56,7 +56,7 @@ export default function Login() {
 
     function doRegister() {
         setVisible(false)
-        navigate("/dojo/register")
+        navigate("/register")
     }
 
     return (
