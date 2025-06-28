@@ -38,6 +38,7 @@ export default function PrincipalCardContainer() {
     };
 
     const openModal = (imagePath) => {
+        if (!imagePath) return;
         setImageSrc(imagePath);
         setIsOpen(true);
     };
@@ -50,26 +51,40 @@ export default function PrincipalCardContainer() {
         return <div>Error: {error.message}</div>;
     }
 
+    const formatMeetDate = (dateString) => {
+        if (!dateString) return 'Fecha no disponible';
+        try {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) return 'Fecha inválida';
+            return format(date, 'dd/MM/yyyy HH:mm');
+        } catch (error) {
+            console.error('Error formatting meet date:', error);
+            return 'Error de fecha';
+        }
+    };
+
     const itemTemplate = (meet) => {
+        if (!meet) return null;
+        
         return (
             <div className="col-12 meet-item">
                 <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
                     <img
                         className="w-9 sm:w-4rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
-                        src={meet.imagePath}
-                        alt={meet.name}
-                        onClick={() => openModal(meet.imagePath)}  // Abrir modal al hacer clic
-                        style={{ cursor: 'pointer' }}  // Cambiar el cursor para indicar clic
+                        src={meet.imagePath || ''}
+                        alt={meet.name || 'Clase'}
+                        onClick={() => meet.imagePath && openModal(meet.imagePath)}  // Abrir modal al hacer clic
+                        style={{ cursor: meet.imagePath ? 'pointer' : 'default' }}  // Cambiar el cursor para indicar clic
                     />
                     <div
                         className="flex flex-column lg:flex-row justify-content-between align-items-center xl:align-items-start lg:flex-1 gap-4">
                         <div className="flex flex-column align-items-center lg:align-items-start gap-3">
                             <div className="flex flex-column gap-1">
-                                <div className="text-2xl font-bold text-900">{meet.name}</div>
+                                <div className="text-2xl font-bold text-900">{meet.name || 'Sin nombre'}</div>
                                 <div className="text-2xl font-bold text-900">
-                                    <span className="text-2xl font-semibold">{meet.price}€</span>
+                                    <span className="text-2xl font-semibold">{meet.price || 0}€</span>
                                 </div>
-                                <div className="text-900">Fecha: {format(meet.meetDate, 'dd/MM/yyyy HH:mm')}</div>
+                                <div className="text-900">Fecha: {formatMeetDate(meet.meetDate)}</div>
                             </div>
                         </div>
                         <div

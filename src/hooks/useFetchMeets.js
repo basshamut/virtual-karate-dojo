@@ -17,8 +17,10 @@ function useFetchMeets(isUser, hasSession) {
                 });
 
                 if (!response.ok) {
-                    console.error('Network response was not ok', error);
-                    setError(error);
+                    const errorMessage = `Network response was not ok: ${response.statusText}`;
+                    console.error(errorMessage);
+                    setError(new Error(errorMessage));
+                    return;
                 }
 
                 const meets = await response.json();
@@ -32,7 +34,7 @@ function useFetchMeets(isUser, hasSession) {
         if (hasSession && isUser) {
             fetchMeets();
         }
-    }, [isUser, hasSession, base64Credentials, error]);
+    }, [isUser, hasSession, base64Credentials]);
 
     return {meets, error};
 }

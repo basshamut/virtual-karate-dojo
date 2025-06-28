@@ -14,10 +14,10 @@ function useGetPurchases(isUser, hasSession, page = 1, limit = 10, startDate, en
                 let url = `${domain}/purchases?page=${page}&limit=${limit}`;
 
                 // Añadir los parámetros de filtrado por fecha si están seleccionados
-                if (startDate) {
+                if (startDate && startDate instanceof Date && !isNaN(startDate.getTime())) {
                     url += `&startDate=${startDate.toISOString()}`;  // Enviar la fecha en formato ISO
                 }
-                if (endDate) {
+                if (endDate && endDate instanceof Date && !isNaN(endDate.getTime())) {
                     url += `&endDate=${endDate.toISOString()}`;
                 }
 

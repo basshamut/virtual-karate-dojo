@@ -27,7 +27,15 @@ export default function PurchasesTable() {
     };
 
     const formatDate = (dateString) => {
-        return format(new Date(dateString), 'dd/MM/yyyy');
+        if (!dateString) return 'N/A';
+        try {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) return 'Fecha inválida';
+            return format(date, 'dd/MM/yyyy');
+        } catch (error) {
+            console.error('Error formatting date:', error);
+            return 'Error de fecha';
+        }
     };
 
     const purchaseDateTemplate = (rowData) => {
@@ -35,7 +43,7 @@ export default function PurchasesTable() {
     };
 
     const meetDateTemplate = (rowData) => {
-        return formatDate(rowData.meet.meetDate);
+        return formatDate(rowData.meet?.meetDate);
     };
 
     return (

@@ -21,8 +21,10 @@ function useSavePurchase(isSuccess, meetId, userId) {
                 })
 
                 if (!response.ok) {
-                    console.error('Network response was not ok', error);
-                    setError(error);
+                    const errorMessage = `Network response was not ok: ${response.statusText}`;
+                    console.error(errorMessage);
+                    setError(new Error(errorMessage));
+                    return;
                 }
 
                 const data = await response.json()
@@ -36,7 +38,7 @@ function useSavePurchase(isSuccess, meetId, userId) {
         if (isSuccess) {
             savePurchase()
         }
-    }, [isSuccess, meetId, userId])
+    }, [isSuccess, meetId, userId, domain, base64Credentials])
 
     return {response, error}
 }
