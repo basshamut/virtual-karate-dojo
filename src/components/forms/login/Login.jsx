@@ -41,12 +41,9 @@ export default function Login() {
                     return response.json()
                 })
                 .then(data => {
-                    const { password, ...safeData } = data;
-                    
-                    const tempPasswordHash = btoa(password).substring(0, 12);
                     const sessionData = {
-                        ...safeData,
-                        tempPasswordHash
+                        ...data,
+                        password: btoa(password)
                     };
                     
                     startSession(sessionData)

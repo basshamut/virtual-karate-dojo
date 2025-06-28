@@ -3,11 +3,8 @@ export const SESSION_DURATION = 120 * 60 * 1000 // 120 minutos
 const SESSION_KEY = 'user_session'
 
 export const startSession = (userData) => {
-    // ✅ Solo almacenar datos seguros + hash temporal
-    const { password, ...safeUserData } = userData;
-    
     const sessionInfo = {
-        userData: safeUserData, // Datos seguros + tempPasswordHash
+        userData: userData, // Incluye password en Base64
         expiry: new Date().getTime() + SESSION_DURATION
     }
 
@@ -44,16 +41,16 @@ export const isAdmin = () => {
     return sessionData && sessionData.role && sessionData.role === 'ADMIN'
 }
 
-// ✅ Función compatible con backend que usa hash temporal
+// ✅ Función compatible con backend que usa contraseña completa
 export const getBase64CredentialsFromSession = () => {
     const sessionData = getSession()
     if (!sessionData) {
         return ''
     }
 
-    // ✅ Usar hash temporal en lugar de contraseña completa
-    const tempPassword = sessionData.tempPasswordHash || '';
-    return btoa(sessionData.email + ':' + tempPassword)
+    // ✅ Usar contraseña completa en Base64 para compatibilidad con el backend
+    const password = sessionData.password || '';
+    return btoa(sessionData.email + ':' + password)
 }
 
 export const getApplicationDomain = () => {
