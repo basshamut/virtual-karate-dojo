@@ -11,10 +11,16 @@ import { loadStripe } from "@stripe/stripe-js";
 import './PrincipalCardContainer.css';
 import PurchasesTable from "../table/PurchasesTable";
 import ImageModal from '../modal/ImageModal';
+import CourseDetailsModal from '../modal/CourseDetailsModal';
 
 export default function PrincipalCardContainer() {
     const [isOpen, setIsOpen] = useState(false);
     const [imageSrc, setImageSrc] = useState('');
+    
+    // Estados para el modal de detalles de cursos
+    const [isCourseModalVisible, setIsCourseModalVisible] = useState(false);
+    const [selectedCourse, setSelectedCourse] = useState(null);
+    
     const userSession = hasSession();
     const isUserValue = isUser();
     const isAdminValue = isAdmin();
@@ -45,6 +51,21 @@ export default function PrincipalCardContainer() {
 
     const closeModal = () => {
         setIsOpen(false);
+    };
+
+    // Funciones para el modal de detalles de cursos
+    const showCourseDetails = (meet) => {
+        setSelectedCourse(meet);
+        setIsCourseModalVisible(true);
+    };
+
+    const hideCourseDetails = () => {
+        setIsCourseModalVisible(false);
+        setSelectedCourse(null);
+    };
+
+    const handlePurchaseFromModal = (meet) => {
+        handleCheckout(meet);
     };
 
     if (error) {
@@ -89,8 +110,17 @@ export default function PrincipalCardContainer() {
                         </div>
                         <div
                             className="flex flex-row lg:flex-column align-items-center lg:align-items-end gap-4 lg:gap-2">
-                            <Button icon="pi pi-shopping-cart" label="Comprar"
-                                    onClick={() => handleCheckout(meet)}></Button>
+                            <Button 
+                                icon="pi pi-eye" 
+                                label="Ver Detalles"
+                                className="p-button-outlined p-button-sm"
+                                onClick={() => showCourseDetails(meet)}
+                            />
+                            <Button 
+                                icon="pi pi-shopping-cart" 
+                                label="Comprar"
+                                onClick={() => handleCheckout(meet)}
+                            />
                         </div>
                     </div>
                 </div>
@@ -119,6 +149,14 @@ export default function PrincipalCardContainer() {
             )}
             {/* ImageModal para agrandar la imagen */}
             <ImageModal isOpen={isOpen} onClose={closeModal} imageSrc={imageSrc} />
+            
+            {/* CourseDetailsModal para ver detalles de cursos */}
+            <CourseDetailsModal
+                isVisible={isCourseModalVisible}
+                onClose={hideCourseDetails}
+                meetData={selectedCourse}
+                onPurchase={handlePurchaseFromModal}
+            />
         </div>
     );
 }
