@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import MeetRegisterForm from "../forms/meet/MeetRegisterForm.jsx";
+import { useState, useEffect } from 'react';
 import { hasSession, isAdmin, isUser } from "../../utils/session.jsx";
 import useFetchMeets from '../../hooks/useFetchMeets.js';
 import useSessionIds from '../../hooks/useSessionIds.js';
@@ -12,6 +11,7 @@ import './PrincipalCardContainer.css';
 import PurchasesTable from "../table/PurchasesTable";
 import ImageModal from '../modal/ImageModal';
 import CourseDetailsModal from '../modal/CourseDetailsModal';
+import CreateClassModal from '../modal/CreateClassModal';
 
 export default function PrincipalCardContainer() {
     const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +21,9 @@ export default function PrincipalCardContainer() {
     const [isCourseModalVisible, setIsCourseModalVisible] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
     
+    // Estados para el modal de crear clase
+    const [isCreateClassModalVisible, setIsCreateClassModalVisible] = useState(false);
+    
     const userSession = hasSession();
     const isUserValue = isUser();
     const isAdminValue = isAdmin();
@@ -28,6 +31,19 @@ export default function PrincipalCardContainer() {
 
     const stripePromise = loadStripe("pk_test_51PSHknKnVUk9u0R7xWznb2PU2LeYeOgFXDVB14wP4BvJQBJ3RdH0ZLF801Ka7oLlNd7pFV7VZndQa2soCDluMFf200UugFXgnD");
     const fetchSessionId = useSessionIds();
+
+    // Escuchar el evento del menú para abrir el modal de crear clase
+    useEffect(() => {
+        const handleOpenCreateClassModal = () => {
+            setIsCreateClassModalVisible(true);
+        };
+
+        window.addEventListener('openCreateClassModal', handleOpenCreateClassModal);
+
+        return () => {
+            window.removeEventListener('openCreateClassModal', handleOpenCreateClassModal);
+        };
+    }, []);
 
     const handleCheckout = async (meet) => {
         const stripe = await stripePromise;
@@ -66,6 +82,20 @@ export default function PrincipalCardContainer() {
 
     const handlePurchaseFromModal = (meet) => {
         handleCheckout(meet);
+    };
+
+    // Funciones para el modal de crear clase
+    const showCreateClassModal = () => {
+        setIsCreateClassModalVisible(true);
+    };
+
+    const hideCreateClassModal = () => {
+        setIsCreateClassModalVisible(false);
+    };
+
+    const handleCreateClassSuccess = () => {
+        // Recargar la página para mostrar la nueva clase
+        window.location.reload();
     };
 
     if (error) {
@@ -138,11 +168,17 @@ export default function PrincipalCardContainer() {
                 </div>
             }
             {isAdminValue && (
-                <div className="dashboard-container flex">
-                    <div className="dashboard-section" style={{flex: 1, marginRight: '1rem'}}>
-                        <MeetRegisterForm/>
+                <div className="admin-dashboard">
+                    <div className="admin-header">
+                        <h2>Panel de Administración</h2>
+                        <Button 
+                            label="Crear Nueva Clase" 
+                            icon="pi pi-plus-circle" 
+                            onClick={showCreateClassModal}
+                            className="p-button-success"
+                        />
                     </div>
-                    <div className="dashboard-section" style={{flex: 2}}>
+                    <div className="admin-content">
                         <PurchasesTable/>
                     </div>
                 </div>
@@ -156,6 +192,13 @@ export default function PrincipalCardContainer() {
                 onClose={hideCourseDetails}
                 meetData={selectedCourse}
                 onPurchase={handlePurchaseFromModal}
+            />
+
+            {/* CreateClassModal para crear nueva clase */}
+            <CreateClassModal
+                isVisible={isCreateClassModalVisible}
+                onClose={hideCreateClassModal}
+                onSuccess={handleCreateClassSuccess}
             />
         </div>
     );

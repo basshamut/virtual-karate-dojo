@@ -1,10 +1,12 @@
 import {useNavigate} from "react-router-dom"
 import {Button} from "primereact/button";
-import {clearSession} from "../../utils/session.jsx";
+import {clearSession, isAdmin} from "../../utils/session.jsx";
 
 export const useMenuItems = () => {
     const navigate = useNavigate();
-    return [
+    const isAdminValue = isAdmin();
+    
+    const menuItems = [
         {
             label: 'Inicio',
             icon: 'pi pi-home',
@@ -12,16 +14,21 @@ export const useMenuItems = () => {
                 navigate('/dashboard')
             }
         }
-        //TODO que opciones de menu se podrian agregar?
-        // ,
-        // {
-        //     label: 'Productos',
-        //     icon: 'pi pi-shopping-cart',
-        //     command: () => {
-        //         navigate('/dashboard')
-        //     }
-        // }
     ];
+
+    // Agregar opción de crear clase solo para administradores
+    if (isAdminValue) {
+        menuItems.push({
+            label: 'Crear Nueva Clase',
+            icon: 'pi pi-plus-circle',
+            command: () => {
+                // Disparar un evento personalizado que será escuchado en el dashboard
+                window.dispatchEvent(new CustomEvent('openCreateClassModal'));
+            }
+        });
+    }
+
+    return menuItems;
 };
 
 export const start = <img alt="logo" src="https://res.cloudinary.com/di7qko5q9/image/upload/v1727294772/karate-classes/sxgzokc8mysthpctbiir.png" height="40" className="mr-2"></img>;

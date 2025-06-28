@@ -8,14 +8,32 @@
     flex: 1;
 }
 
-@media (max-width: 768px) {
-    .dashboard-container {
-        flex-direction: column; /* Cambia a columna en móviles */
-    }
+/* Estilos para el panel de administración */
+.admin-dashboard {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
 
-    .dashboard-section {
-        margin-right: 0;
-    }
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
+    border-bottom: 1px solid var(--primary-200);
+}
+
+.admin-header h2 {
+    margin: 0;
+    color: var(--primary-700);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.admin-content {
+    padding: 1.5rem;
 }
 
 /* Estilos para los botones de cursos */
@@ -35,8 +53,30 @@
     padding: 0.5rem 1rem;
 }
 
-/* Responsive para botones en móviles */
+/* Responsive design */
 @media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column; /* Cambia a columna en móviles */
+    }
+
+    .dashboard-section {
+        margin-right: 0;
+    }
+
+    .admin-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .admin-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .admin-content {
+        padding: 1rem;
+    }
+
     .meet-item .flex-row.lg\:flex-column {
         flex-direction: column !important;
         gap: 0.5rem;
