@@ -2,12 +2,15 @@ import {useState} from "react";
 import {DataTable} from 'primereact/datatable';
 import {Column} from 'primereact/column';
 import {Calendar} from "primereact/calendar";
+import {Button} from 'primereact/button';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import useGetPurchases from "../../hooks/useGetPurchases";
 import {hasSession, isUser} from "../../utils/session";
 import {format} from 'date-fns';
+import MeetDetailsModal from '../modal/MeetDetailsModal';
+import './PurchasesTable.css';
 
 export default function PurchasesTable() {
     const userSession = hasSession();
@@ -18,6 +21,10 @@ export default function PurchasesTable() {
 
     const [selectedStartDate, setSelectedStartDate] = useState(null); // Se inicia como null para no filtrar inicialmente
     const [selectedEndDate, setSelectedEndDate] = useState(null);
+    
+    // Estados para el modal de detalles
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedPurchase, setSelectedPurchase] = useState(null);
 
     const {purchases, totalRecords, error} = useGetPurchases(isUserValue, userSession, page, rowsPerPage, selectedStartDate, selectedEndDate);
 
@@ -44,6 +51,30 @@ export default function PurchasesTable() {
 
     const meetDateTemplate = (rowData) => {
         return formatDate(rowData.meet?.meetDate);
+    };
+
+    // Función para abrir el modal con los detalles
+    const showDetails = (purchase) => {
+        setSelectedPurchase(purchase);
+        setIsModalVisible(true);
+    };
+
+    // Función para cerrar el modal
+    const hideDetails = () => {
+        setIsModalVisible(false);
+        setSelectedPurchase(null);
+    };
+
+    // Template para el botón de detalles
+    const detailsTemplate = (rowData) => {
+        return (
+            <Button
+                icon="pi pi-eye"
+                label="Ver Detalles"
+                className="p-button-sm p-button-outlined"
+                onClick={() => showDetails(rowData)}
+            />
+        );
     };
 
     return (
@@ -76,8 +107,16 @@ export default function PurchasesTable() {
                     <Column field="purchaseDate" header="Fecha de Compra" sortable body={purchaseDateTemplate}></Column>
                     <Column field="meet.meetDate" header="Fecha de Clase" sortable body={meetDateTemplate}></Column>
                     <Column field="price" header="Precio" sortable></Column>
+                    <Column header="Acciones" body={detailsTemplate} style={{ width: '150px' }}></Column>
                 </DataTable>
             </div>
+
+            {/* Modal de detalles */}
+            <MeetDetailsModal
+                isVisible={isModalVisible}
+                onClose={hideDetails}
+                meetData={selectedPurchase}
+            />
         </div>
     );
 }

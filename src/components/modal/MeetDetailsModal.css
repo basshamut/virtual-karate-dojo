@@ -1,0 +1,139 @@
+.meet-details-modal .p-dialog {
+    max-width: 800px;
+}
+
+.meet-details-modal .p-dialog-content {
+    padding: 2rem;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: var(--primary-700);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.meet-details-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.meet-image-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.meet-image {
+    max-width: 300px;
+    max-height: 200px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+}
+
+.meet-info-section,
+.purchase-info-section {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.purchase-info-section h3 {
+    margin: 0 0 1rem 0;
+    color: var(--primary-600);
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-bottom: 2px solid var(--primary-200);
+    padding-bottom: 0.5rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--primary-700);
+    min-width: 150px;
+}
+
+.info-value {
+    color: #495057;
+    text-align: right;
+    flex: 1;
+    margin-left: 1rem;
+}
+
+.info-value.price {
+    font-weight: 600;
+    color: var(--primary-600);
+    font-size: 1.1rem;
+}
+
+.info-value.purchase-id {
+    font-family: monospace;
+    background-color: #e9ecef;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.meet-url {
+    color: var(--primary-600);
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.meet-url:hover {
+    text-decoration: underline;
+    color: var(--primary-800);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .meet-details-modal .p-dialog {
+        width: 95vw !important;
+        max-width: none;
+    }
+    
+    .meet-details-modal .p-dialog-content {
+        padding: 1rem;
+    }
+    
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .info-label {
+        min-width: auto;
+    }
+    
+    .info-value {
+        text-align: left;
+        margin-left: 0;
+    }
+    
+    .meet-image {
+        max-width: 100%;
+        height: auto;
+    }
+} 
