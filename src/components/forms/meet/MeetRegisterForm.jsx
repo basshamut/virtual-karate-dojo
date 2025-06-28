@@ -73,7 +73,8 @@ export default function MeetRegisterForm() {
     const [date, setDate] = useState(today);
     const [url, setUrl] = useState('');
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [selectedImage, setSelectedImage] = useState(null); // Añadir estado para la imagen
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
     const domain = getApplicationDomain();
     const base64Credentials = getBase64CredentialsFromSession();
     const navigate = useNavigate();
@@ -98,7 +99,7 @@ export default function MeetRegisterForm() {
         // Validar tipo de archivo
         const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
         if (!allowedTypes.includes(file.type)) {
-            alert('Solo se permiten archivos de imagen (JPEG, PNG, GIF)');
+            setErrorMessage('Solo se permiten archivos de imagen (JPEG, PNG, GIF)');
             event.target.value = '';
             return;
         }
@@ -106,12 +107,13 @@ export default function MeetRegisterForm() {
         // Validar tamaño (máximo 5MB)
         const maxSize = 5 * 1024 * 1024; // 5MB
         if (file.size > maxSize) {
-            alert('El archivo es demasiado grande. Máximo 5MB permitido.');
+            setErrorMessage('El archivo es demasiado grande. Máximo 5MB permitido.');
             event.target.value = '';
             return;
         }
 
         setSelectedImage(file);
+        setErrorMessage('');
     }
 
     function validateUrl(url) {
@@ -126,7 +128,7 @@ export default function MeetRegisterForm() {
     function saveMeet() {
         // Validar URL antes de enviar
         if (url && !validateUrl(url)) {
-            alert('Por favor, ingrese una URL válida');
+            setErrorMessage('Por favor, ingrese una URL válida');
             return;
         }
 
@@ -159,11 +161,23 @@ export default function MeetRegisterForm() {
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
+                setErrorMessage('Error al guardar la clase. Intente nuevamente.');
             });
     }
 
     return (
         <RegisterContainer>
+            {errorMessage && (
+                <div style={{ 
+                    color: 'red', 
+                    backgroundColor: 'rgba(255, 0, 0, 0.1)', 
+                    padding: '10px', 
+                    borderRadius: '5px', 
+                    marginBottom: '15px' 
+                }}>
+                    {errorMessage}
+                </div>
+            )}
             <div className="inline-flex flex-column gap-2" style={{marginBottom: '15px'}}>
                 <Label htmlFor="url">Dirección de la Reunión Online</Label>
                 <StyledInputText id="url" label="Url" placeholder={"https://meet.google.com/..."}

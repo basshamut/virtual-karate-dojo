@@ -91,8 +91,6 @@ export default function Register() {
     }
 
     function pushDate(e) {
-        console.log(e)
-        console.log(e.value)
         setDate(e.value)
     }
 
