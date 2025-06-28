@@ -3,27 +3,30 @@ export const SESSION_DURATION = 120 * 60 * 1000 // 120 minutos
 const SESSION_KEY = 'user_session'
 
 export const startSession = (userData) => {
-    const sessionData = {
-        userData: userData,
+    // ✅ Solo almacenar datos seguros + hash temporal
+    const { password, ...safeUserData } = userData;
+    
+    const sessionInfo = {
+        userData: safeUserData, // Datos seguros + tempPasswordHash
         expiry: new Date().getTime() + SESSION_DURATION
     }
 
-    localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData))
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionInfo))
 }
 
 export const getSession = () => {
-    const sessionData = JSON.parse(localStorage.getItem(SESSION_KEY))
+    const sessionData = JSON.parse(sessionStorage.getItem(SESSION_KEY))
     if (!sessionData) return null
 
     if (new Date().getTime() > sessionData.expiry) {
-        localStorage.removeItem(SESSION_KEY)
+        sessionStorage.removeItem(SESSION_KEY)
         return null
     }
     return sessionData.userData
 }
 
 export const clearSession = () => {
-    localStorage.removeItem(SESSION_KEY)
+    sessionStorage.removeItem(SESSION_KEY)
 }
 
 export const hasSession = () => {
@@ -41,13 +44,16 @@ export const isAdmin = () => {
     return sessionData && sessionData.role && sessionData.role === 'ADMIN'
 }
 
+// ✅ Función compatible con backend que usa hash temporal
 export const getBase64CredentialsFromSession = () => {
     const sessionData = getSession()
     if (!sessionData) {
         return ''
     }
 
-    return btoa(sessionData.email + ':' + sessionData.password)
+    // ✅ Usar hash temporal en lugar de contraseña completa
+    const tempPassword = sessionData.tempPasswordHash || '';
+    return btoa(sessionData.email + ':' + tempPassword)
 }
 
 export const getApplicationDomain = () => {

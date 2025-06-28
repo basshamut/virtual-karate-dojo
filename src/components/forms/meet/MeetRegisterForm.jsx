@@ -92,10 +92,44 @@ export default function MeetRegisterForm() {
     });
 
     function handleImageUpload(event) {
-        setSelectedImage(event.target.files[0]); // Obtener el archivo seleccionado
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Validar tipo de archivo
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Solo se permiten archivos de imagen (JPEG, PNG, GIF)');
+            event.target.value = '';
+            return;
+        }
+
+        // Validar tamaño (máximo 5MB)
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+            alert('El archivo es demasiado grande. Máximo 5MB permitido.');
+            event.target.value = '';
+            return;
+        }
+
+        setSelectedImage(file);
+    }
+
+    function validateUrl(url) {
+        try {
+            const urlObj = new URL(url);
+            return urlObj.protocol === 'https:' || urlObj.protocol === 'http:';
+        } catch {
+            return false;
+        }
     }
 
     function saveMeet() {
+        // Validar URL antes de enviar
+        if (url && !validateUrl(url)) {
+            alert('Por favor, ingrese una URL válida');
+            return;
+        }
+
         const product = products.find(item => item.stripeCode === selectedProduct);
 
         // Crear un FormData para manejar la imagen y los datos del formulario

@@ -41,8 +41,15 @@ export default function Login() {
                     return response.json()
                 })
                 .then(data => {
-                    data.password = btoa(password)
-                    startSession(data)
+                    const { password, ...safeData } = data;
+                    
+                    const tempPasswordHash = btoa(password).substring(0, 12);
+                    const sessionData = {
+                        ...safeData,
+                        tempPasswordHash
+                    };
+                    
+                    startSession(sessionData)
                     navigate("/dashboard")
                 })
                 .catch(error => {
